@@ -19,9 +19,9 @@ public class MainClass {
 	public static void main(String [] args) throws Exception{
 		
 		
-		operationCost = UtilityClass.extractCostFuncFromCVS("D://Experiment//operationCost.csv");
+		operationCost = UtilityClass.extractCostFuncFromCVS("E://SwedenData//NewLife//opCost//operationCost.csv");
 		
-		File folder = new File("D://Experiment//Source");
+		File folder = new File("E://SwedenData//NewLife//dataset//TYPE_1");
 		
 		ArrayList<GroupAccuracy> listOfAccuracy = new ArrayList<GroupAccuracy>();
 		
@@ -29,10 +29,22 @@ public class MainClass {
 		
 		for(int i=0; i<files.length; i++){
 			
-			TrainAndTestData dataObject = UtilityClass.extractTrainAndTestSetFromCVS(files[i].getAbsolutePath());
+			File fileToExtract = new File(files[i].getAbsolutePath());
 			
-			String trainFile = "D://Experiment//SplittedData//" + files[i].getName()+ ".train.arff";
-			String testFile = "D://Experiment//SplittedData//" + files[i].getName()+ ".test.arff";
+			File [] insideFolder = files[i].listFiles();
+			for(int j=0; i<insideFolder.length; j++){
+				if(insideFolder[j].getName().contains("generated_profiled_") && 
+						insideFolder[j].getName().contains(".csv")){
+					fileToExtract = insideFolder[j];
+					break;
+				}
+			}
+			
+			
+			TrainAndTestData dataObject = UtilityClass.extractTrainAndTestSetFromCVS(fileToExtract.getAbsolutePath());
+			
+			String trainFile = files[i].getAbsolutePath() + "//" + fileToExtract.getName() + ".train.arff";
+			String testFile = files[i].getAbsolutePath() + "//" + fileToExtract.getName() + ".test.arff";
 			
 			UtilityClass.writeToARFFFile(trainFile, dataObject.trainData);
 			UtilityClass.writeToARFFFile(testFile, dataObject.testData);
@@ -46,14 +58,14 @@ public class MainClass {
 			
         	listOfAccuracy.add(controller.getGroupAccuracy());
 			
-        	String evaluationPath = "D://Experiment//Evaluation//"+files[i].getName()+".EVAL.xls";
+        	String evaluationPath = files[i].getAbsolutePath() + "//" + fileToExtract.getName() + ".EVAL.xls";
         	controller.writeEvaluationResults(new File(evaluationPath));
 			
 		}
 		
 		
 		
-		GroupAccuracy.writeGroupArray(new File("D://Experiment//Evaluation//final.xls"), listOfAccuracy);
+		GroupAccuracy.writeGroupArray(new File("E://SwedenData//NewLife//dataset//final.xls"), listOfAccuracy);
 		
 		
 		System.out.println("Done!");

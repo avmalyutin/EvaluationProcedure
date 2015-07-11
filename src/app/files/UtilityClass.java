@@ -172,7 +172,7 @@ public class UtilityClass {
 	public static void writeToARFFFile(String filePath, ArrayList<String> servicesData){
 			
 			String bufferToWrite = "@relation ServiceSelectorelector " +"\n"+
-				"@attribute championServiceInstance {WSXWebService, LuSWebService, YUSWebService, GDEWebService} " +"\n"+
+				"@attribute championServiceInstance {CyclicUp1, CyclicUp2, CyclicUp3, CyclicUp4} " +"\n"+
 				"@attribute timestamp numeric " +"\n"+
 				"@attribute responsetime numeric  " +"\n"+"\n"+
 				"@data" + "\n";
