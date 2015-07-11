@@ -43,6 +43,8 @@ public class EvaluationController {
 		ArrayList<EvaluationData> list3 = new ArrayList<EvaluationData>();
 		this.listOfEvaluatioObjects.put(TOPGAP_LABEL, list3);
 		
+		this.groupAccuracy = new GroupAccuracy();
+		
 	}
 
 
@@ -121,9 +123,7 @@ public class EvaluationController {
     	listOfEvaluatioObjects.get(TOP1_LABEL).add(objectTopOne);
     	listOfEvaluatioObjects.get(TOPGAP_LABEL).add(objectTopGap);
     	
-    	
-    	
-    	this.groupAccuracy = new GroupAccuracy(fileToEvaluate.getName(), percentageRandomEval, percentageSimpleEval, percentageTopRange);
+    	this.groupAccuracy.addCounters(randomEvaluationCounter, simpleEvaluationCounter, topRangeEvaluationCounter, counter); 
     	
 	}
 	
@@ -155,6 +155,17 @@ public class EvaluationController {
 			    cell4.setCellValue((float)obj.getPercentage());
 			    		
 			}
+		    
+		    Row row = sheet.createRow(rownum++);
+		    Cell cell1 = row.createCell(0);
+		    cell1.setCellFormula("COUNT(A1:A"+ (rownum -1) +")");
+		    Cell cell2 = row.createCell(1);
+		    cell2.setCellFormula("SUM(B1:B"+ (rownum -1) +")");
+		    Cell cell3 = row.createCell(2);
+		    cell3.setCellFormula("SUM(C1:C"+ (rownum -1) +")");
+		    Cell cell4 = row.createCell(3);
+		    cell4.setCellFormula("SUM(D1:D"+ (rownum -1) +")/"+ (rownum -1) );
+		    
 	    }    
 	    try {
 	        FileOutputStream out = 

@@ -18,24 +18,37 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class GroupAccuracy {
 	
 	private String file;
-	private float randomAccuracy;
-	private float simpleAccuracy;
-	private float gapAccuracy;
 	
-	public GroupAccuracy(String file, float randomAccuracy,
-			float simpleAccuracy, float gapAccuracy) {
-		super();
-		this.file = file;
-		this.randomAccuracy = randomAccuracy;
-		this.simpleAccuracy = simpleAccuracy;
-		this.gapAccuracy = gapAccuracy;
+
+	private int randomRigthCount;
+	private int simpleRigthCount;
+	private int gapRightCount;
+	private int attempsCount;
+	
+	
+	public void addCounters(int randomCounter, int simpleCounter, int gapCounter, int totalCounters){
+		
+		this.randomRigthCount += randomCounter;
+		this.simpleRigthCount += simpleCounter;
+		this.gapRightCount += gapCounter;
+		this.attempsCount += totalCounters;
+	}
+	
+	public float calculateRandomAccuracy(){
+		return ((float)this.randomRigthCount/this.attempsCount)*100;
+	}
+	
+	public float calculateSimpleAccuracy(){
+		return ((float)this.simpleRigthCount/this.attempsCount)*100;
 	}
 
+	public float calculateTopGapAccuracy(){
+		return ((float)this.gapRightCount/this.attempsCount)*100;
+	}
 	
 	public static void writeGroupArray(File file, ArrayList<GroupAccuracy> list){
 		
 		Workbook workbook = new XSSFWorkbook();
-		
 		
 		Sheet sheet = workbook.createSheet("Final results");
 	    int rownum = 0;
@@ -46,11 +59,11 @@ public class GroupAccuracy {
 			Cell cell1 = row.createCell(0);
 			cell1.setCellValue((String)obj.getFile());
 			Cell cell2 = row.createCell(1);
-			cell2.setCellValue((float)obj.getRandomAccuracy());
+			cell2.setCellValue((float)obj.calculateRandomAccuracy());
 			Cell cell3 = row.createCell(2);
-			cell3.setCellValue((float)obj.getSimpleAccuracy());
+			cell3.setCellValue((float)obj.calculateSimpleAccuracy());
 			Cell cell4 = row.createCell(3);
-			cell4.setCellValue((float)obj.getGapAccuracy());
+			cell4.setCellValue((float)obj.calculateTopGapAccuracy());
 			    		
 		}
 		
@@ -59,11 +72,11 @@ public class GroupAccuracy {
 		Cell cell1 = row.createCell(0);
 		cell1.setCellValue((String)"Total:");
 		Cell cell2 = row.createCell(1);
-		cell2.setCellFormula("AVERAGE(B1:B180)");
+		cell2.setCellFormula("AVERAGE(B1:B"+ (rownum - 1)+")");
 		Cell cell3 = row.createCell(2);
-		cell3.setCellFormula("AVERAGE(C1:C180)");
+		cell3.setCellFormula("AVERAGE(C1:C"+ (rownum - 1)+")");
 		Cell cell4 = row.createCell(3);
-		cell4.setCellFormula("AVERAGE(D1:D180)");
+		cell4.setCellFormula("AVERAGE(D1:D"+ (rownum - 1)+")");
 		
 		
 	    try {
@@ -94,28 +107,5 @@ public class GroupAccuracy {
 		this.file = file;
 	}
 
-	public float getRandomAccuracy() {
-		return randomAccuracy;
-	}
-
-	public void setRandomAccuracy(float randomAccuracy) {
-		this.randomAccuracy = randomAccuracy;
-	}
-
-	public float getSimpleAccuracy() {
-		return simpleAccuracy;
-	}
-
-	public void setSimpleAccuracy(float simpleAccuracy) {
-		this.simpleAccuracy = simpleAccuracy;
-	}
-
-	public float getGapAccuracy() {
-		return gapAccuracy;
-	}
-
-	public void setGapAccuracy(float gapAccuracy) {
-		this.gapAccuracy = gapAccuracy;
-	}
-
+	
 }

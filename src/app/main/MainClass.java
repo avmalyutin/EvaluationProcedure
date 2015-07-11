@@ -80,10 +80,12 @@ public class MainClass {
 				controller.evaluateData(k, new File(testFile), listToTestProcess.get(k), 75, 25, 15);
 			}
 			
-        	listOfAccuracy.add(controller.getGroupAccuracy());
+        	
 			
-        	String evaluationPath = files[i].getAbsolutePath() + "//" + fileToExtract.getName() + ".EVAL.xls";
-        	controller.writeEvaluationResults(new File(evaluationPath));
+        	String evaluationPath = files[i].getAbsolutePath() + "//" + fileToExtract.getName() + "_" + (i+1) + ".EVAL.xls";
+        	controller.writeEvaluationResults(new File(evaluationPath + "_" + (i+1)));
+        	controller.getGroupAccuracy().setFile(evaluationPath + "_" + (i+1));
+        	listOfAccuracy.add(controller.getGroupAccuracy());
 			
 		}
 		
