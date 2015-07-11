@@ -54,11 +54,4 @@ public class EvaluationData {
 	public void setPercentage(float percentage) {
 		this.percentage = percentage;
 	}
-	
-	
-	
-	
-	
-	
-
 }

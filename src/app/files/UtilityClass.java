@@ -55,20 +55,28 @@ public class UtilityClass {
 			mapOfTrainInstances.get(argeth).add(inter);
 		}
 		
-		ArrayList<Instances> listToTrainingProcess = new ArrayList<Instances>();
-		Instances igerg = new Instances(train, 0, 0);
+		int mapSize = mapOfTrainInstances.entrySet().size();
+		int arrayElemCount = mapSize/numArrays;
+		arrayElemCount = arrayElemCount + (mapSize%numArrays !=0 ? 1 : 0);
+		
+		ArrayList<Instances> listToTrainingProcess = new ArrayList<Instances>(numArrays);
+		Instances bufferInstances = new Instances(train, 0, 0);
 		int counter = 0;
+		int counterToStop = 0;
+		
+		
 		for (Map.Entry<String, Instances> entry : mapOfTrainInstances.entrySet()){
 		    
 			counter++;
-			Instances hjerbfuer = entry.getValue();
-			for(int q=0; q<hjerbfuer.numInstances();q++){
-				igerg.add(hjerbfuer.instance(q));
+			counterToStop++;
+			Instances innerBufferInstances = entry.getValue();
+			for(int q=0; q<innerBufferInstances.numInstances();q++){
+				bufferInstances.add(innerBufferInstances.instance(q));
 			}
 			 
-			if(counter == numArrays){
-				listToTrainingProcess.add(igerg);
-				igerg = new Instances(train, 0, 0);
+			if(counter == arrayElemCount || counterToStop == mapSize){
+				listToTrainingProcess.add(bufferInstances);
+				bufferInstances = new Instances(train, 0, 0);
 				counter = 0;
 		    }
 		}		
