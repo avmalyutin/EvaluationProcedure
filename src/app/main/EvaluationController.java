@@ -46,13 +46,9 @@ public class EvaluationController {
 	}
 
 
-	public void evaluateData(File fileToEvaluate, int respTimePer, int costOpPerc, int gapPerc){
+	public void evaluateData(int index, File fileToEvaluate, Instances listOfInstances, int respTimePer, int costOpPerc, int gapPerc){
 		
 		
-		
-		
-		Instances listOfInstances = UtilityClass.readInstancesFromFile(fileToEvaluate.getAbsolutePath());
-    	
     	HashMap<Double, EvaluationProcedure> map = new HashMap<Double, EvaluationProcedure>();
     	
     	for(int i=0; i<listOfInstances.numInstances();i++){
@@ -93,9 +89,9 @@ public class EvaluationController {
 	    	percentageSimpleEval = (float)simpleEvaluationCounter*100/counter;
 	    	percentageTopRange = (float)topRangeEvaluationCounter*100/counter;
 
-	    	EvaluationData objectRandom = new EvaluationData(counter, randomEvaluationCounter, counter, percentageRandomEval);
-	    	EvaluationData objectTopOne = new EvaluationData(counter, simpleEvaluationCounter, counter, percentageSimpleEval);
-	    	EvaluationData objectTopGap = new EvaluationData(counter, topRangeEvaluationCounter, counter, percentageTopRange);
+	    	EvaluationData objectRandom = new EvaluationData(index, randomEvaluationCounter, counter, percentageRandomEval);
+	    	EvaluationData objectTopOne = new EvaluationData(index, simpleEvaluationCounter, counter, percentageSimpleEval);
+	    	EvaluationData objectTopGap = new EvaluationData(index, topRangeEvaluationCounter, counter, percentageTopRange);
 	    	
 	    	listOfEvaluatioObjects.get(RANDOM_LABEL).add(objectRandom);
 	    	listOfEvaluatioObjects.get(TOP1_LABEL).add(objectTopOne);
@@ -123,6 +119,8 @@ public class EvaluationController {
 	
 	
 	public void writeEvaluationResults(File file){
+		
+		
 				
 		Workbook workbook = new XSSFWorkbook();
 		
@@ -171,6 +169,16 @@ public class EvaluationController {
 
 	public void setGroupAccuracy(GroupAccuracy groupAccuracy) {
 		this.groupAccuracy = groupAccuracy;
+	}
+
+
+	public MainModel getModel() {
+		return model;
+	}
+
+
+	public void setModel(MainModel model) {
+		this.model = model;
 	}
 	
 }

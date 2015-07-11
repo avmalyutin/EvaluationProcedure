@@ -16,15 +16,23 @@ import app.model.MainModel;
 
 public class MainClass {
 
+	//paths
+	
+	private static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//TYPE_1";
+	private static final String OP_COST_FILE = "E://SwedenData//NewLife//opCost//operationCost.csv";
+	
+	
+	
+	//other stuff
 	public static HashMap<String, Integer> operationCost = new HashMap<String, Integer>();
 	
 	
 	public static void main(String [] args) throws Exception{
 		
 		
-		operationCost = UtilityClass.extractCostFuncFromCVS("E://SwedenData//NewLife//opCost//operationCost.csv");
+		operationCost = UtilityClass.extractCostFuncFromCVS(OP_COST_FILE);
 		
-		File folder = new File("E://SwedenData//NewLife//dataset//TYPE_1");
+		File folder = new File(ROOT_PATH_PREF);
 		
 		ArrayList<GroupAccuracy> listOfAccuracy = new ArrayList<GroupAccuracy>();
 		
@@ -53,22 +61,21 @@ public class MainClass {
 			UtilityClass.writeToARFFFile(testFile, dataObject.testData);
 			
 			MainModel model = new MainModel();
-			Instances train = UtilityClass.readInstancesFromFile(trainFile);
+			EvaluationController controller = new EvaluationController(model);
 			
+			Instances train = UtilityClass.readInstancesFromFile(trainFile);
+			Instances test = UtilityClass.readInstancesFromFile(testFile);
 			
 			ArrayList<Instances> listToTrainingProcess = UtilityClass.splitInstancesArrayToArrays(train, 10);
-				
+			ArrayList<Instances> listToTestProcess = UtilityClass.splitInstancesArrayToArrays(test, 10);
 			
 			
 			
 			for(int k=0; k<listToTrainingProcess.size(); k++){
-			
-				model.trainFromInstances(listToTrainingProcess.get(0));
-			
+				model.trainFromInstances(listToTrainingProcess.get(k));
+				controller.setModel(model);
+				controller.evaluateData(k, new File(testFile), listToTestProcess.get(k), 75, 25, 15);
 			}
-			
-			EvaluationController controller = new EvaluationController(model);
-        	controller.evaluateData(new File(testFile), 75, 25, 15);
 			
         	listOfAccuracy.add(controller.getGroupAccuracy());
 			
@@ -79,7 +86,7 @@ public class MainClass {
 		
 		
 		
-		GroupAccuracy.writeGroupArray(new File("E://SwedenData//NewLife//dataset//final.xls"), listOfAccuracy);
+		GroupAccuracy.writeGroupArray(new File(ROOT_PATH_PREF + "//final.xls"), listOfAccuracy);
 		
 		
 		System.out.println("Done!");
