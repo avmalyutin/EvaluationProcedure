@@ -89,13 +89,13 @@ public class EvaluationController {
 	    	percentageSimpleEval = (float)simpleEvaluationCounter*100/counter;
 	    	percentageTopRange = (float)topRangeEvaluationCounter*100/counter;
 
-	    	EvaluationData objectRandom = new EvaluationData(index, randomEvaluationCounter, counter, percentageRandomEval);
-	    	EvaluationData objectTopOne = new EvaluationData(index, simpleEvaluationCounter, counter, percentageSimpleEval);
-	    	EvaluationData objectTopGap = new EvaluationData(index, topRangeEvaluationCounter, counter, percentageTopRange);
+	    	//EvaluationData objectRandom = new EvaluationData(index, randomEvaluationCounter, counter, percentageRandomEval);
+	    	//EvaluationData objectTopOne = new EvaluationData(index, simpleEvaluationCounter, counter, percentageSimpleEval);
+	    	//EvaluationData objectTopGap = new EvaluationData(index, topRangeEvaluationCounter, counter, percentageTopRange);
 	    	
-	    	listOfEvaluatioObjects.get(RANDOM_LABEL).add(objectRandom);
-	    	listOfEvaluatioObjects.get(TOP1_LABEL).add(objectTopOne);
-	    	listOfEvaluatioObjects.get(TOPGAP_LABEL).add(objectTopGap);
+	    	//listOfEvaluatioObjects.get(RANDOM_LABEL).add(objectRandom);
+	    	//listOfEvaluatioObjects.get(TOP1_LABEL).add(objectTopOne);
+	    	//listOfEvaluatioObjects.get(TOPGAP_LABEL).add(objectTopGap);
 	    	
 	    }
     	
@@ -112,6 +112,16 @@ public class EvaluationController {
     	System.out.println("Top range evaluation");
     	System.out.println("Total: " + counter + " Right: " + topRangeEvaluationCounter);
     	System.out.println("Percentage:" + percentageTopRange);
+    	
+    	EvaluationData objectRandom = new EvaluationData(index, randomEvaluationCounter, counter, percentageRandomEval);
+    	EvaluationData objectTopOne = new EvaluationData(index, simpleEvaluationCounter, counter, percentageSimpleEval);
+    	EvaluationData objectTopGap = new EvaluationData(index, topRangeEvaluationCounter, counter, percentageTopRange);
+    	
+    	listOfEvaluatioObjects.get(RANDOM_LABEL).add(objectRandom);
+    	listOfEvaluatioObjects.get(TOP1_LABEL).add(objectTopOne);
+    	listOfEvaluatioObjects.get(TOPGAP_LABEL).add(objectTopGap);
+    	
+    	
     	
     	this.groupAccuracy = new GroupAccuracy(fileToEvaluate.getName(), percentageRandomEval, percentageSimpleEval, percentageTopRange);
     	

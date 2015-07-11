@@ -43,7 +43,10 @@ public class MainClass {
 			File fileToExtract = new File(files[i].getAbsolutePath());
 			
 			File [] insideFolder = files[i].listFiles();
-			for(int j=0; i<insideFolder.length; j++){
+			if(insideFolder == null || insideFolder.length <= 0){
+				break;
+			}
+			for(int j=0; i < insideFolder.length; j++){
 				if(insideFolder[j].getName().contains("generated_profiled_") && 
 						insideFolder[j].getName().contains(".csv")){
 					fileToExtract = insideFolder[j];
