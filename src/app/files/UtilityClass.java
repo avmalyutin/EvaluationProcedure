@@ -12,12 +12,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
+import weka.core.Instance;
 import weka.core.Instances;
 
 public class UtilityClass {
@@ -35,6 +38,45 @@ public class UtilityClass {
 		}
 		return null;
 	}
+		
+	
+	
+	public static ArrayList<Instances> splitInstancesArrayToArrays(Instances train, int numArrays){
+		
+		Map <String, Instances> mapOfTrainInstances = new HashMap<String, Instances>();
+		
+		for(int g=0; g<train.numInstances(); g++){
+			Instance inter = (Instance)train.instance(g);
+			String argeth = new BigDecimal(inter.value(1)).toPlainString();
+			if(!mapOfTrainInstances.containsKey(argeth)){
+				Instances ingerg = new Instances(train, 0, 0);
+				mapOfTrainInstances.put(argeth, ingerg);
+			}
+			mapOfTrainInstances.get(argeth).add(inter);
+		}
+		
+		ArrayList<Instances> listToTrainingProcess = new ArrayList<Instances>();
+		Instances igerg = new Instances(train, 0, 0);
+		int counter = 0;
+		for (Map.Entry<String, Instances> entry : mapOfTrainInstances.entrySet()){
+		    
+			counter++;
+			Instances hjerbfuer = entry.getValue();
+			for(int q=0; q<hjerbfuer.numInstances();q++){
+				igerg.add(hjerbfuer.instance(q));
+			}
+			 
+			if(counter == numArrays){
+				listToTrainingProcess.add(igerg);
+				igerg = new Instances(train, 0, 0);
+				counter = 0;
+		    }
+		}		
+		
+		return listToTrainingProcess;
+		
+	}
+	
 	
 	
 	

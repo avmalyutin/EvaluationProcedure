@@ -1,9 +1,12 @@
 package app.main;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
+import weka.core.Instance;
 import weka.core.Instances;
 import app.files.TrainAndTestData;
 import app.files.UtilityClass;
@@ -51,7 +54,18 @@ public class MainClass {
 			
 			MainModel model = new MainModel();
 			Instances train = UtilityClass.readInstancesFromFile(trainFile);
-			model.trainFromInstances(train);
+			
+			
+			ArrayList<Instances> listToTrainingProcess = UtilityClass.splitInstancesArrayToArrays(train, 10);
+				
+			
+			
+			
+			for(int k=0; k<listToTrainingProcess.size(); k++){
+			
+				model.trainFromInstances(listToTrainingProcess.get(0));
+			
+			}
 			
 			EvaluationController controller = new EvaluationController(model);
         	controller.evaluateData(new File(testFile), 75, 25, 15);

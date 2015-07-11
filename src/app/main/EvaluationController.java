@@ -48,6 +48,9 @@ public class EvaluationController {
 
 	public void evaluateData(File fileToEvaluate, int respTimePer, int costOpPerc, int gapPerc){
 		
+		
+		
+		
 		Instances listOfInstances = UtilityClass.readInstancesFromFile(fileToEvaluate.getAbsolutePath());
     	
     	HashMap<Double, EvaluationProcedure> map = new HashMap<Double, EvaluationProcedure>();
