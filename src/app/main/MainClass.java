@@ -15,7 +15,7 @@ import app.model.MainModel;
 public class MainClass {
 
 	//paths
-	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//TYPE_CYCLE_BIG_UP";
+	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//TYPE_ACYCLE_DOWN";
 	private static final String OP_COST_FILE = "E://SwedenData//NewLife//opCost//operationCost.csv";
 	
 	//other stuff

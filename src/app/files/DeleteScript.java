@@ -1,14 +1,14 @@
-package app.utility;
+package app.files;
 
 import java.io.File;
 
 import app.main.MainClass;
 
-public class UtilityScripts {
+public class DeleteScript {
 
 	public static void main(String[] args) {
 
-		UtilityScripts.deleteEvaluationResults(MainClass.ROOT_PATH_PREF);
+		DeleteScript.deleteEvaluationResults(MainClass.ROOT_PATH_PREF);
 		System.out.println("Done deleting");
 
 	}
