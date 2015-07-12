@@ -19,17 +19,15 @@ import weka.core.Instances;
 
 public class RecognitionModel implements Serializable  {
 	
-	
 	private static final long serialVersionUID = -7432427941917676807L;
 
 	private int trainedInstances;
 	private Map<String, ClassifierImpl> mapOfclassifiers;
-	private static final ExecutorService workers = Executors.newCachedThreadPool();
-	
+	private static final ExecutorService workers = Executors.newCachedThreadPool();	
 
 	public RecognitionModel() {
-		trainedInstances = 0;
-		mapOfclassifiers = new HashMap<String, ClassifierImpl>();
+		this.trainedInstances = 0;
+		this.mapOfclassifiers = new HashMap<String, ClassifierImpl>();
 	}
 
 	public void trainFromInstances(Instances train){
@@ -45,17 +43,23 @@ public class RecognitionModel implements Serializable  {
 			
 			if(!mapOfclassifiers.containsKey(serverName) || mapOfclassifiers.size() <=0){
 				ClassifierImpl newObject = new ClassifierImpl(serverName);
-				Thread thread = new Thread(){
-					@Override
-					public void run(){
-						newObject.trainInstances();
-					} 
-				};
-				listOfThread.add(thread);
 				mapOfclassifiers.put(serverName, newObject);
 			}
 			mapOfclassifiers.get(serverName).addInstance(instance1);
 		}
+		
+		//create threads
+		
+		for (Map.Entry<String, ClassifierImpl> entry : mapOfclassifiers.entrySet()){
+			Thread thread = new Thread(){
+				@Override
+				public void run(){
+					entry.getValue().trainInstances();
+				} 
+			};
+			listOfThread.add(thread);
+		}
+		
 		
 		//run all thread to train services models
 		for(Thread th : listOfThread){
@@ -72,7 +76,8 @@ public class RecognitionModel implements Serializable  {
 			}
 		}
 		
-		trainedInstances += train.numInstances();
+		
+		this.trainedInstances += train.numInstances();
 		
 	}
 	

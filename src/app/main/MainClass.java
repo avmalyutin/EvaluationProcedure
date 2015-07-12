@@ -12,16 +12,11 @@ import app.files.TrainAndTestData;
 import app.files.UtilityClass;
 import app.model.MainModel;
 
-
-
 public class MainClass {
 
 	//paths
-	
-	private static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//TYPE_1";
+	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//TYPE_CYCLE_BIG_UP";
 	private static final String OP_COST_FILE = "E://SwedenData//NewLife//opCost//operationCost.csv";
-	
-	
 	
 	//other stuff
 	public static HashMap<String, Integer> operationCost = new HashMap<String, Integer>();
@@ -46,7 +41,7 @@ public class MainClass {
 			if(insideFolder == null || insideFolder.length <= 0){
 				break;
 			}
-			for(int j=0; i < insideFolder.length; j++){
+			for(int j=0; j < insideFolder.length; j++){
 				if(insideFolder[j].getName().contains("generated_profiled_") && 
 						insideFolder[j].getName().contains(".csv")){
 					fileToExtract = insideFolder[j];
@@ -57,11 +52,12 @@ public class MainClass {
 			
 			TrainAndTestData dataObject = UtilityClass.extractTrainAndTestSetFromCVS(fileToExtract.getAbsolutePath());
 			
-			String trainFile = files[i].getAbsolutePath() + "//" + fileToExtract.getName() + ".train.arff";
-			String testFile = files[i].getAbsolutePath() + "//" + fileToExtract.getName() + ".test.arff";
+			String trainFile = files[i].getAbsolutePath() + "//" + fileToExtract.getName() + i + ".train.arff";
+			String testFile = files[i].getAbsolutePath() + "//" + fileToExtract.getName() + i + ".test.arff";
 			
-			UtilityClass.writeToARFFFile(trainFile, dataObject.trainData);
-			UtilityClass.writeToARFFFile(testFile, dataObject.testData);
+			
+			UtilityClass.writeToARFFFile(trainFile, dataObject.trainData, dataObject.getListOfServers());
+			UtilityClass.writeToARFFFile(testFile, dataObject.testData, dataObject.getListOfServers());
 			
 			MainModel model = new MainModel();
 			EvaluationController controller = new EvaluationController(model);
@@ -73,7 +69,6 @@ public class MainClass {
 			ArrayList<Instances> listToTestProcess = UtilityClass.splitInstancesArrayToArrays(test, 10);
 			
 			
-			
 			for(int k=0; k<listToTrainingProcess.size(); k++){
 				model.trainFromInstances(listToTrainingProcess.get(k));
 				controller.setModel(model);
@@ -82,7 +77,7 @@ public class MainClass {
 			
         	
 			
-        	String evaluationPath = files[i].getAbsolutePath() + "//" + fileToExtract.getName() + "_" + (i+1) + ".EVAL.xls";
+        	String evaluationPath = files[i].getAbsolutePath() + "//" + fileToExtract.getName() + "_" + i + ".EVAL.xls";
         	controller.writeEvaluationResults(new File(evaluationPath));
         	controller.getGroupAccuracy().setFile(evaluationPath);
         	listOfAccuracy.add(controller.getGroupAccuracy());
@@ -97,19 +92,4 @@ public class MainClass {
 		System.out.println("Done!");
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

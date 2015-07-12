@@ -187,6 +187,7 @@ public class UtilityClass {
 					String nameServer = info[1];
 					String responceTime = info[2];
 					String buffer = nameServer + "#" + date + "#" + responceTime;
+					dataObject.addServer(nameServer);
 					if(counter < 36){
 						dataObject.trainData.add(buffer);
 						counter++;
@@ -219,43 +220,47 @@ public class UtilityClass {
 	}
 	
 	
-	public static void writeToARFFFile(String filePath, ArrayList<String> servicesData){
+	public static void writeToARFFFile(String filePath, ArrayList<String> servicesData, ArrayList<String> serversNames){
 			
-			String bufferToWrite = "@relation ServiceSelectorelector " +"\n"+
-				"@attribute championServiceInstance {CyclicUp1, CyclicUp2, CyclicUp3, CyclicUp4} " +"\n"+
-				"@attribute timestamp numeric " +"\n"+
-				"@attribute responsetime numeric  " +"\n"+"\n"+
-				"@data" + "\n";
-			
-			for(String str:servicesData){
-				
-				String [] buffer = str.split("#");
-				
-				
-				DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-				try{
-					buffer[1] = String.valueOf(format.parse(buffer[1]).getTime());
-				}
-				catch(Exception ex){
-					ex.printStackTrace();
-				}
-				
-				bufferToWrite += "\""+buffer[0] + "\"," +buffer[1]+","+buffer[2]+"\n"; 
-				
-			}
-			
-			
-			try{
-				BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
-				writer.write(bufferToWrite);
-				writer.newLine();
-				writer.flush();
-				writer.close();
-			}
-			catch(Exception ex){
+		String serversString = "";
+		for (String serverName : serversNames) {
+			serversString += serverName + ",";
+		}
+		
+		
+		String bufferToWrite = "@relation ServiceSelectorelector " + "\n"
+				+ "@attribute championServiceInstance {" + serversString + "} "
+				+ "\n" + "@attribute timestamp numeric " + "\n"
+				+ "@attribute responsetime numeric  " + "\n" + "\n" + "@data"
+				+ "\n";
+
+		for (String str : servicesData) {
+
+			String[] buffer = str.split("#");
+
+			DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
+					Locale.ENGLISH);
+			try {
+				buffer[1] = String.valueOf(format.parse(buffer[1]).getTime());
+			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
+
+			bufferToWrite += "\"" + buffer[0] + "\"," + buffer[1] + ","
+					+ buffer[2] + "\n";
+
 		}
+
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
+			writer.write(bufferToWrite);
+			writer.newLine();
+			writer.flush();
+			writer.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
 	
 	
 	public static double convertStrToDouble(String date){
