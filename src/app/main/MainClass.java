@@ -8,6 +8,7 @@ import java.util.Map;
 
 import weka.core.Instance;
 import weka.core.Instances;
+import app.files.DeleteScript;
 import app.files.TrainAndTestData;
 import app.files.UtilityClass;
 import app.model.MainModel;
@@ -15,7 +16,7 @@ import app.model.MainModel;
 public class MainClass {
 
 	//paths
-	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//TYPE_ACYCLE_DOWN";
+	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//4. LikeNormalCyclicUpSmall";
 	private static final String OP_COST_FILE = "E://SwedenData//NewLife//opCost//operationCost.csv";
 	
 	//other stuff
@@ -24,6 +25,7 @@ public class MainClass {
 	
 	public static void main(String [] args) throws Exception{
 		
+		DeleteScript.deleteEvaluationResults(MainClass.ROOT_PATH_PREF);
 		
 		operationCost = UtilityClass.extractCostFuncFromCVS(OP_COST_FILE);
 		
