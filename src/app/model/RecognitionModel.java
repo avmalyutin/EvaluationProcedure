@@ -91,7 +91,7 @@ public class RecognitionModel implements Serializable  {
 	    		}
 	    	};
 	    	tasks.add(th);
-	    	System.out.println("Check: " + imp.getKey());
+	    	//System.out.println("Check: " + imp.getKey());
 	    }
 		
 	    ArrayList<ServiceObject> listToReturn = new ArrayList<ServiceObject>();

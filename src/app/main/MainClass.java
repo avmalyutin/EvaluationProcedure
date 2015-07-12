@@ -83,8 +83,8 @@ public class MainClass {
         	
 			
         	String evaluationPath = files[i].getAbsolutePath() + "//" + fileToExtract.getName() + "_" + (i+1) + ".EVAL.xls";
-        	controller.writeEvaluationResults(new File(evaluationPath + "_" + (i+1)));
-        	controller.getGroupAccuracy().setFile(evaluationPath + "_" + (i+1));
+        	controller.writeEvaluationResults(new File(evaluationPath));
+        	controller.getGroupAccuracy().setFile(evaluationPath);
         	listOfAccuracy.add(controller.getGroupAccuracy());
 			
 		}
