@@ -25,13 +25,13 @@ public class ServiceObject implements Serializable{
 		this.serviceName = serviceName;
 		this.responceTims = responceTims;
 		
-		if(MainClass.operationCost.containsKey(this.serviceName)){
-			this.operationCost = MainClass.operationCost.get(this.serviceName);
-		}
-		else{
+		//if(MainClass.operationCost.containsKey(this.serviceName)){
+		//	this.operationCost = MainClass.operationCost.get(this.serviceName);
+		//}
+		//else{
 			Random rand = new Random();
-			this.operationCost= serviceName.length() + rand.nextInt(50);
-		}
+			this.operationCost= serviceName.length() + rand.nextInt(2);
+		//}
 	}
 	
 	

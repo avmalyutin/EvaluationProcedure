@@ -14,9 +14,12 @@ import app.files.UtilityClass;
 import app.model.MainModel;
 
 public class MainClass {
+	
+	
 
 	//paths
-	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//4. LikeNormalCyclicUpSmall";
+	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//5. Test";
+	private static final int NUMBER_ARRAYS = 30;
 	private static final String OP_COST_FILE = "E://SwedenData//NewLife//opCost//operationCost.csv";
 	
 	//other stuff
@@ -67,11 +70,11 @@ public class MainClass {
 			Instances train = UtilityClass.readInstancesFromFile(trainFile);
 			Instances test = UtilityClass.readInstancesFromFile(testFile);
 			
-			ArrayList<Instances> listToTrainingProcess = UtilityClass.splitInstancesArrayToArrays(train, 10);
-			ArrayList<Instances> listToTestProcess = UtilityClass.splitInstancesArrayToArrays(test, 10);
+			ArrayList<Instances> listToTrainingProcess = UtilityClass.splitInstancesArrayToArrays(train, NUMBER_ARRAYS);
+			ArrayList<Instances> listToTestProcess = UtilityClass.splitInstancesArrayToArrays(test, NUMBER_ARRAYS);
 			
 			
-			for(int k=0; k<listToTrainingProcess.size(); k++){
+			for(int k=0; k<listToTrainingProcess.size() - 1; k++){
 				model.trainFromInstances(listToTrainingProcess.get(k));
 				controller.setModel(model);
 				controller.evaluateData(k, new File(testFile), listToTestProcess.get(k), 75, 25, 15);
