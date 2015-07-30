@@ -227,7 +227,7 @@ public class UtilityClass {
 			serversString += serverName + ",";
 		}
 		
-		
+		serversString = serversString.substring(0, serversString.lastIndexOf(","));
 		String bufferToWrite = "@relation ServiceSelectorelector " + "\n"
 				+ "@attribute championServiceInstance {" + serversString + "} "
 				+ "\n" + "@attribute timestamp numeric " + "\n"

@@ -18,7 +18,7 @@ public class MainClass {
 	
 
 	//paths
-	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//5. Test";
+	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//1. NORMAL_DERIVATION";
 	private static final int NUMBER_ARRAYS = 30;
 	private static final String OP_COST_FILE = "E://SwedenData//NewLife//opCost//operationCost.csv";
 	
