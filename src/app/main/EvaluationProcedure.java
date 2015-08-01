@@ -50,7 +50,7 @@ public class EvaluationProcedure {
 		
 		Random rand = new Random();
 		int randomNumber = rand.nextInt(100);
-		int randomService = randomNumber%actualList.size();
+		int randomService = randomNumber % actualList.size();
 		String namePredicted = actualList.get(randomService).getServiceName();
 		String nameActual = this.getTheLeastRankingActualServiceName();
 		if(nameActual.equals(namePredicted))
@@ -154,5 +154,25 @@ public class EvaluationProcedure {
 			}
 		}
 		return serviceName;
+	}
+
+
+	public double getDate() {
+		return date;
+	}
+
+
+	public MainModel getModelToEvaluate() {
+		return modelToEvaluate;
+	}
+
+
+	public ArrayList<ServiceObject> getActualList() {
+		return actualList;
+	}
+
+
+	public ArrayList<ServiceObject> getPredictedList() {
+		return predictedList;
 	}
 }

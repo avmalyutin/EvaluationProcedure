@@ -18,8 +18,8 @@ public class MainClass {
 	
 
 	//paths
-	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//1. NORMAL_DERIVATION";
-	private static final int NUMBER_ARRAYS = 30;
+	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//6. Diff levels";
+	private static final int NUMBER_ARRAYS = 10;
 	private static final String OP_COST_FILE = "E://SwedenData//NewLife//opCost//operationCost.csv";
 	
 	//other stuff
@@ -77,7 +77,7 @@ public class MainClass {
 			for(int k=0; k<listToTrainingProcess.size() - 1; k++){
 				model.trainFromInstances(listToTrainingProcess.get(k));
 				controller.setModel(model);
-				controller.evaluateData(k, new File(testFile), listToTestProcess.get(k), 75, 25, 15);
+				controller.evaluateData(k, new File(testFile), listToTestProcess.get(k), 100, 0, 10);
 			}
 			
         	
