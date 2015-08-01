@@ -48,7 +48,7 @@ public class EvaluationController {
 	}
 
 
-	public void evaluateData(int index, File fileToEvaluate, Instances listOfInstances, int respTimePer, int costOpPerc, int gapPerc){
+	public void evaluateData(int index, String pathToSave, File fileToEvaluate, Instances listOfInstances, int respTimePer, int costOpPerc, int gapPerc){
 		
 		
     	HashMap<Double, EvaluationProcedure> map = new HashMap<Double, EvaluationProcedure>();
@@ -104,7 +104,7 @@ public class EvaluationController {
 	    }
     	
 	    
-	    //this.writeRealAndPredictedValues("D://results.csv", map);
+	    UtilityClass.writeRealAndPredictedValues(pathToSave + "//realAndPredicted.csv", map);
 
     	System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     	System.out.println("Random evaluation");
@@ -187,97 +187,6 @@ public class EvaluationController {
 
 	
 	
-	
-	
-	
-	private void writeRealAndPredictedValues(String path, HashMap<Double, EvaluationProcedure> map){
-		
-		Workbook workbook = new XSSFWorkbook();
-		
-		Iterator<Entry<Double, EvaluationProcedure>> it = map.entrySet().iterator();
-		Sheet sheet = workbook.createSheet("Timing");
-	    while (it.hasNext()) {
-	    	Map.Entry imp = (Map.Entry) it.next();
-		
-	    	
-	         
-		    int rownum = 0;
-		    
-		    Row rowTitle = sheet.createRow(rownum++);
-		    Cell cell1 = rowTitle.createCell(0);
-		    cell1.setCellValue("Date");
-		    Cell cell2 = rowTitle.createCell(1);
-		    cell2.setCellValue("Date");
-		    Cell cell3 = rowTitle.createCell(2);
-		    cell3.setCellValue("Date");
-		    Cell cell4 = rowTitle.createCell(3);
-		    cell4.setCellValue("Date");
-		    Cell cell5 = rowTitle.createCell(4);
-		    cell5.setCellValue("Date");
-		    
-		    
-		    for(EvaluationProcedure obj : (ArrayList<EvaluationProcedure>)imp.getValue()){
-			    
-			    Row row = sheet.createRow(rownum++);
-			    		
-			    cell1 = row.createCell(0);
-			    cell1.setCellValue(obj.getDate());
-			    cell2 = row.createCell(1);
-			    cell2.setCellValue(obj.getActualList().get(0).getResponceTims());
-			    cell3 = row.createCell(2);
-			    cell3.setCellValue(obj.getActualList().get(1).getResponceTims());
-			    cell4 = row.createCell(3);
-			    cell4.setCellValue(obj.getActualList().get(2).getResponceTims());
-			    cell5 = row.createCell(3);
-			    cell5.setCellValue(obj.getActualList().get(3).getResponceTims());
-			    
-			    row = sheet.createRow(rownum++);
-			    cell1 = row.createCell(0);
-			    cell1.setCellValue(obj.getDate());
-			    cell2 = row.createCell(1);
-			    cell2.setCellValue(obj.getPredictedList().get(0).getResponceTims());
-			    cell3 = row.createCell(2);
-			    cell3.setCellValue(obj.getPredictedList().get(1).getResponceTims());
-			    cell4 = row.createCell(3);
-			    cell4.setCellValue(obj.getPredictedList().get(2).getResponceTims());
-			    cell5 = row.createCell(3);
-			    cell5.setCellValue(obj.getPredictedList().get(3).getResponceTims());
-			    
-			    		
-			}
-		    /*
-		    Row row = sheet.createRow(rownum++);
-		    Cell cell11 = row.createCell(0);
-		    cell1.setCellFormula("COUNT(A1:A"+ (rownum -1) +")");
-		    Cell cell12 = row.createCell(1);
-		    cell2.setCellFormula("SUM(B1:B"+ (rownum -1) +")");
-		    Cell cell13 = row.createCell(2);
-		    cell3.setCellFormula("SUM(C1:C"+ (rownum -1) +")");
-		    Cell cell14 = row.createCell(3);
-		    cell4.setCellFormula("SUM(D1:D"+ (rownum -1) +")/"+ (rownum -1) );
-		    */
-	    }    
-	    try {
-	        FileOutputStream out = 
-	                new FileOutputStream(new File(path));
-	        workbook.write(out);
-	        out.close();
-	        workbook.close();
-	        System.out.println("Excel written successfully..");
-	             
-	    } catch (FileNotFoundException e) {
-	        e.printStackTrace();
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	    }
-	}
-	
-	
-	
-	
-	
-	
-
 	public GroupAccuracy getGroupAccuracy() {
 		return groupAccuracy;
 	}
