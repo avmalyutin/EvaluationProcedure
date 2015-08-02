@@ -353,7 +353,11 @@ public class UtilityClass {
 
 			rownum = sheet.getLastRowNum();
             if(rownum == 0){
-            	rownum = rownum + 1;
+            	//rownum = rownum + 1;
+            	
+            	//EvaluationProcedure eval = map.entrySet().iterator().next().getValue();
+            	
+            	
             	Row rowTitle = sheet.createRow(rownum);
         	    Cell cell1 = rowTitle.createCell(0);
         	    cell1.setCellValue("Date");
@@ -393,7 +397,6 @@ public class UtilityClass {
 		
 		Iterator<Entry<Double, EvaluationProcedure>> it = map.entrySet().iterator();
 		
-		
 		while (it.hasNext()) {
 			
 			Map.Entry imp = (Map.Entry) it.next();
@@ -407,28 +410,28 @@ public class UtilityClass {
 			//cell1.setCellValue(obj.getDate());
 			
 			Cell cell2 = row.createCell(1);
-			cell2.setCellValue(obj.getActualList().get(0).getServiceName() + ":"+ obj.getActualList().get(0).getResponceTims());
+			cell2.setCellValue(obj.getActualList().get(0).getResponceTims());
 			ServiceObject predictedObject = ServiceObject.returnServiceObjectByServiceName(obj.getPredictedList(),obj.getActualList().get(0).getServiceName());
 			Cell cell3 = row.createCell(2);
-			cell3.setCellValue(predictedObject.getServiceName() + ":"+ predictedObject.getResponceTims());
+			cell3.setCellValue(predictedObject.getResponceTims());
 
 			Cell cell4 = row.createCell(3);
-			cell4.setCellValue(obj.getActualList().get(1).getServiceName() + ":"+ obj.getActualList().get(1).getResponceTims());
+			cell4.setCellValue(obj.getActualList().get(1).getResponceTims());
 			predictedObject = ServiceObject.returnServiceObjectByServiceName(obj.getPredictedList(),obj.getActualList().get(1).getServiceName());
 			Cell cell5 = row.createCell(4);
-			cell5.setCellValue(predictedObject.getServiceName() + ":"+ predictedObject.getResponceTims());
+			cell5.setCellValue(predictedObject.getResponceTims());
 
 			Cell cell6 = row.createCell(5);
-			cell6.setCellValue(obj.getActualList().get(2).getServiceName() + ":"+ obj.getActualList().get(2).getResponceTims());
+			cell6.setCellValue(obj.getActualList().get(2).getResponceTims());
 			predictedObject = ServiceObject.returnServiceObjectByServiceName(obj.getPredictedList(),obj.getActualList().get(2).getServiceName());
 			Cell cell7 = row.createCell(6);
-			cell7.setCellValue(predictedObject.getServiceName() + ":"+ predictedObject.getResponceTims());
+			cell7.setCellValue(predictedObject.getResponceTims());
 
 			Cell cell8 = row.createCell(7);
-			cell8.setCellValue(obj.getActualList().get(3).getServiceName() + ":"+ obj.getActualList().get(3).getResponceTims());
+			cell8.setCellValue(obj.getActualList().get(3).getResponceTims());
 			predictedObject = ServiceObject.returnServiceObjectByServiceName(obj.getPredictedList(),obj.getActualList().get(3).getServiceName());
 			Cell cell9 = row.createCell(8);
-			cell9.setCellValue(predictedObject.getServiceName() + ":"+ predictedObject.getResponceTims());
+			cell9.setCellValue(predictedObject.getResponceTims());
 
 		}
 		try (FileOutputStream out = new FileOutputStream(new File(path))){

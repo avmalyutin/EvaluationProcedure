@@ -94,11 +94,11 @@ public class EvaluationController {
 	    	percentageTopRange = (float)topRangeEvaluationCounter*100/counter;
 	    	
 	    	
-	    	/*System.out.println("Real:" + obj.getActualList().get(0).getResponceTims() + ":Predicted: " + obj.getPredictedList().get(0).getResponceTims());
+	    	System.out.println("Real:" + obj.getActualList().get(0).getResponceTims() + ":Predicted: " + obj.getPredictedList().get(0).getResponceTims());
 	    	System.out.println("Real:" + obj.getActualList().get(1).getResponceTims() + ":Predicted: " + obj.getPredictedList().get(1).getResponceTims());
 	    	System.out.println("Real:" + obj.getActualList().get(2).getResponceTims() + ":Predicted: " + obj.getPredictedList().get(2).getResponceTims());
 	    	System.out.println("Real:" + obj.getActualList().get(3).getResponceTims() + ":Predicted: " + obj.getPredictedList().get(3).getResponceTims());
-	    	 */
+	    	
 	    }
     	
 	    

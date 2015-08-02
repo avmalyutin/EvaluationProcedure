@@ -79,13 +79,16 @@ public class MainClassV2 {
 				}
 			});
 			
-			model.trainFromInstances(listToCheckProcess.get(0));
 			
-			for(int k = 1; k<listToCheckProcess.size() - 1; k++){
-				
-				controller.setModel(model);
-				controller.evaluateData(k, files[i].getAbsolutePath(), new File(generalFile), listToCheckProcess.get(k), 100, 0, 10);
+			//int firstBlood = 50;
+			//for(int g = 0; g<firstBlood; g++)
+			//model.trainFromInstances(listToCheckProcess.get(0));
+			
+			for(int k = 0; k<listToCheckProcess.size() - 2; k++){
 				model.trainFromInstances(listToCheckProcess.get(k));
+				controller.setModel(model);
+				controller.evaluateData(k, files[i].getAbsolutePath(), new File(generalFile), listToCheckProcess.get(k + 1), 100, 0, 10);
+				
 			}
 			
         	

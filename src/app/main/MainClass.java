@@ -3,6 +3,7 @@ package app.main;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ public class MainClass {
 
 	//paths
 	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//6. Diff levels";
-	private static final int NUMBER_ARRAYS = 2;
+	private static final int NUMBER_ARRAYS = 10;
 	private static final String OP_COST_FILE = "E://SwedenData//NewLife//opCost//operationCost.csv";
 	
 	//other stuff
@@ -74,14 +75,14 @@ public class MainClass {
 			ArrayList<Instances> listToTestProcess = UtilityClass.splitInstancesArrayToArrays(test, NUMBER_ARRAYS);
 			
 			
-			for(int k=0; k<listToTrainingProcess.size() - 1; k++){
+			
+			for(int k=0; k<listToTrainingProcess.size() - 2; k++){
 				model.trainFromInstances(listToTrainingProcess.get(k));
 				controller.setModel(model);
 				controller.evaluateData(k, files[i].getAbsolutePath(), new File(testFile), listToTestProcess.get(k), 100, 0, 10);
 			}
 			
         	
-			
         	String evaluationPath = files[i].getAbsolutePath() + "//" + fileToExtract.getName() + "_" + i + ".EVAL.xls";
         	controller.writeEvaluationResults(new File(evaluationPath));
         	controller.getGroupAccuracy().setFile(evaluationPath);
@@ -92,7 +93,6 @@ public class MainClass {
 		
 		
 		GroupAccuracy.writeGroupArray(new File(ROOT_PATH_PREF + "//final.xls"), listOfAccuracy);
-		
 		
 		System.out.println("Done!");
 		

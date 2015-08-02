@@ -19,8 +19,8 @@ public class ClassifierImpl implements Serializable{
 	
 	private Instances instancesToTrain;
 	//private MultilayerPerceptron machineAlgorithm;
-	//private SMOreg machineAlgorithm;
-	private M5P machineAlgorithm;
+	private SMOreg machineAlgorithm;
+	//private M5P machineAlgorithm;
 	//private NaiveBayesUpdateable machineAlgorithm;
 	
 	private String serviceName;
@@ -32,8 +32,8 @@ public class ClassifierImpl implements Serializable{
 	public ClassifierImpl(String serviceName1) {
 		this.serviceName = serviceName1;
 		//this.machineAlgorithm = new MultilayerPerceptron();
-		//this.machineAlgorithm = new SMOreg();
-		this.machineAlgorithm = new M5P();
+		this.machineAlgorithm = new SMOreg();
+		//this.machineAlgorithm = new M5P();
 		//this.machineAlgorithm = new NaiveBayesUpdateable();
 		Attribute1 = new Attribute("timestamp");
 		Attribute2 = new Attribute("responsetime");
@@ -55,7 +55,7 @@ public class ClassifierImpl implements Serializable{
 			System.out.println("Training for:" + serviceName +" "+ trainedInstances + " instances");
 			instancesToTrain.setClassIndex(instancesToTrain.numAttributes() - 1);
 			machineAlgorithm.buildClassifier(instancesToTrain);
-			instancesToTrain.delete();
+			//instancesToTrain.delete();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -70,6 +70,7 @@ public class ClassifierImpl implements Serializable{
 			inst.setValue(Attribute1, date);
 			inst.setValue(Attribute2, '?');
 			predictedRespTime = machineAlgorithm.classifyInstance(inst);
+			System.out.println("In ClassImp: serviceName: " + serviceName + ":" + predictedRespTime);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
