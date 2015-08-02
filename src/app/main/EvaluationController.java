@@ -50,10 +50,10 @@ public class EvaluationController {
 
 	public void evaluateData(int index, String pathToSave, File fileToEvaluate, Instances listOfInstances, int respTimePer, int costOpPerc, int gapPerc){
 		
-		
+		System.out.println("Evaluate:" + index);
     	HashMap<Double, EvaluationProcedure> map = new HashMap<Double, EvaluationProcedure>();
     	
-    	for(int i=0; i<listOfInstances.numInstances();i++){
+    	for(int i=0; i<listOfInstances.numInstances() ;i++){
     		String nameservice = listOfInstances.instance(i).stringValue(0);
     		double daterequest = listOfInstances.instance(i).value(1);
     		double respTime = listOfInstances.instance(i).value(2);
@@ -92,19 +92,17 @@ public class EvaluationController {
 	    	percentageRandomEval = (float)randomEvaluationCounter*100/counter;
 	    	percentageSimpleEval = (float)simpleEvaluationCounter*100/counter;
 	    	percentageTopRange = (float)topRangeEvaluationCounter*100/counter;
-
-	    	//EvaluationData objectRandom = new EvaluationData(index, randomEvaluationCounter, counter, percentageRandomEval);
-	    	//EvaluationData objectTopOne = new EvaluationData(index, simpleEvaluationCounter, counter, percentageSimpleEval);
-	    	//EvaluationData objectTopGap = new EvaluationData(index, topRangeEvaluationCounter, counter, percentageTopRange);
 	    	
-	    	//listOfEvaluatioObjects.get(RANDOM_LABEL).add(objectRandom);
-	    	//listOfEvaluatioObjects.get(TOP1_LABEL).add(objectTopOne);
-	    	//listOfEvaluatioObjects.get(TOPGAP_LABEL).add(objectTopGap);
 	    	
+	    	/*System.out.println("Real:" + obj.getActualList().get(0).getResponceTims() + ":Predicted: " + obj.getPredictedList().get(0).getResponceTims());
+	    	System.out.println("Real:" + obj.getActualList().get(1).getResponceTims() + ":Predicted: " + obj.getPredictedList().get(1).getResponceTims());
+	    	System.out.println("Real:" + obj.getActualList().get(2).getResponceTims() + ":Predicted: " + obj.getPredictedList().get(2).getResponceTims());
+	    	System.out.println("Real:" + obj.getActualList().get(3).getResponceTims() + ":Predicted: " + obj.getPredictedList().get(3).getResponceTims());
+	    	 */
 	    }
     	
 	    
-	    UtilityClass.writeRealAndPredictedValues(pathToSave + "//realAndPredicted.csv", map);
+	    UtilityClass.writeRealAndPredictedValues(pathToSave + "//generated_profiled_realAndPredicted.csv", map);
 
     	System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     	System.out.println("Random evaluation");

@@ -123,6 +123,18 @@ public class ServiceObject implements Serializable{
 	}
 	
 	
+	public static ServiceObject returnServiceObjectByServiceName(ArrayList<ServiceObject> list, String serviceName){
+		
+		for(ServiceObject obj:list){
+			if(obj.getServiceName().equals(serviceName))
+				return obj;
+		}
+		return null;
+		
+		
+	}
+	
+	
 	
 	public String getServiceName() {
 		return serviceName;

@@ -5,11 +5,13 @@ import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
@@ -23,15 +25,20 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Header;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import weka.core.Instance;
 import weka.core.Instances;
 import app.main.EvaluationProcedure;
+import app.model.ServiceObject;
 
 public class UtilityClass {
 	
@@ -230,6 +237,50 @@ public class UtilityClass {
 	}
 	
 	
+	public static TrainAndTestData extractOneSetFromCVS(String filename){
+		
+		TrainAndTestData dataObject = new TrainAndTestData();
+		BufferedReader br = null;
+		String line = "";
+		String cvsSplitBy = ",";
+		try {
+		 
+			br = new BufferedReader(new FileReader(filename));
+			
+			while ((line = br.readLine()) != null) {
+		
+				String[] country = line.split(cvsSplitBy);
+					
+				if(country.length == 2){
+					String[] info = country[1].split(";");
+					String date = country[0];
+					String nameServer = info[1];
+					String responceTime = info[2];
+					String buffer = nameServer + "#" + date + "#" + responceTime;
+					dataObject.addServer(nameServer);
+					
+					dataObject.trainData.add(buffer);
+					
+				}
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return dataObject;
+	}
+	
+	
+	
 	public static void writeToARFFFile(String filePath, ArrayList<String> servicesData, ArrayList<String> serversNames){
 			
 		String serversString = "";
@@ -276,70 +327,114 @@ public class UtilityClass {
 	
 	public static void writeRealAndPredictedValues(String path, HashMap<Double, EvaluationProcedure> map){
 		
-		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet = null;
+		int rownum = 0;
+		Workbook wb = null;
+		
+		try{
+			File f = new File(path);
+			f.createNewFile();
+		}
+		catch(IOException ex){
+			ex.printStackTrace();
+		}
+		
+		
+		try(FileInputStream inp = new FileInputStream(path)){
+			if(inp.available() == 0){
+				wb = new XSSFWorkbook();
+				sheet = wb.createSheet("Real and predicted values");
+				
+			}else{
+				wb = WorkbookFactory.create(inp);
+	            sheet = wb.getSheetAt(0);
+			}
+			
+
+			rownum = sheet.getLastRowNum();
+            if(rownum == 0){
+            	rownum = rownum + 1;
+            	Row rowTitle = sheet.createRow(rownum);
+        	    Cell cell1 = rowTitle.createCell(0);
+        	    cell1.setCellValue("Date");
+        	    Cell cell2 = rowTitle.createCell(1);
+        	    cell2.setCellValue("Service 1 real");
+        	    Cell cell3 = rowTitle.createCell(2);
+        	    cell3.setCellValue("Service 1 predicted");
+        	    Cell cell4 = rowTitle.createCell(3);
+        	    cell4.setCellValue("Service 2 real");
+        	    Cell cell5 = rowTitle.createCell(4);
+        	    cell5.setCellValue("Service 2 predicted");
+        	    Cell cell6 = rowTitle.createCell(5);
+        	    cell6.setCellValue("Service 3 real");
+        	    Cell cell7 = rowTitle.createCell(6);
+        	    cell7.setCellValue("Service 3 predicted");
+        	    Cell cell8 = rowTitle.createCell(7);
+        	    cell8.setCellValue("Service 4 real");
+        	    Cell cell9 = rowTitle.createCell(8);
+        	    cell9.setCellValue("Service 4 predicted");
+            	
+            }
+		}
+		catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (EncryptedDocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 		Iterator<Entry<Double, EvaluationProcedure>> it = map.entrySet().iterator();
-		Sheet sheet = workbook.createSheet("Real and predicted values");
 		
-		int rownum = 0;
-		Row rowTitle = sheet.createRow(rownum++);
-	    Cell cell1 = rowTitle.createCell(0);
-	    cell1.setCellValue("Date");
-	    
-	    Cell cell2 = rowTitle.createCell(1);
-	    cell2.setCellValue("Service 1 real");
-	    Cell cell3 = rowTitle.createCell(2);
-	    cell3.setCellValue("Service 1 predicted");
-	    Cell cell4 = rowTitle.createCell(3);
-	    cell4.setCellValue("Service 2 real");
-	    Cell cell5 = rowTitle.createCell(4);
-	    cell5.setCellValue("Service 2 predicted");
-	    Cell cell6 = rowTitle.createCell(5);
-	    cell6.setCellValue("Service 3 real");
-	    Cell cell7 = rowTitle.createCell(6);
-	    cell7.setCellValue("Service 3 predicted");
-	    Cell cell8 = rowTitle.createCell(7);
-	    cell8.setCellValue("Service 4 real");
-	    Cell cell9 = rowTitle.createCell(8);
-	    cell9.setCellValue("Service 4 predicted");
 		
 		while (it.hasNext()) {
 			
 			Map.Entry imp = (Map.Entry) it.next();
 
 			EvaluationProcedure obj = (EvaluationProcedure) imp.getValue();
+			rownum = rownum + 1;
+			Row row = sheet.createRow(rownum);
 
-			Row row = sheet.createRow(rownum++);
-
-			cell1 = row.createCell(0);
+			Cell cell1 = row.createCell(0);
 			cell1.setCellValue(UtilityClass.convertDoubleToString(obj.getDate()));
-
-			cell2 = row.createCell(1);
+			//cell1.setCellValue(obj.getDate());
+			
+			Cell cell2 = row.createCell(1);
 			cell2.setCellValue(obj.getActualList().get(0).getServiceName() + ":"+ obj.getActualList().get(0).getResponceTims());
-			cell3 = row.createCell(2);
-			cell3.setCellValue(obj.getPredictedList().get(0).getServiceName() + ":"+ obj.getPredictedList().get(0).getResponceTims());
+			ServiceObject predictedObject = ServiceObject.returnServiceObjectByServiceName(obj.getPredictedList(),obj.getActualList().get(0).getServiceName());
+			Cell cell3 = row.createCell(2);
+			cell3.setCellValue(predictedObject.getServiceName() + ":"+ predictedObject.getResponceTims());
 
-			cell4 = row.createCell(3);
+			Cell cell4 = row.createCell(3);
 			cell4.setCellValue(obj.getActualList().get(1).getServiceName() + ":"+ obj.getActualList().get(1).getResponceTims());
-			cell5 = row.createCell(4);
-			cell5.setCellValue(obj.getPredictedList().get(1).getServiceName() + ":"+ obj.getPredictedList().get(1).getResponceTims());
+			predictedObject = ServiceObject.returnServiceObjectByServiceName(obj.getPredictedList(),obj.getActualList().get(1).getServiceName());
+			Cell cell5 = row.createCell(4);
+			cell5.setCellValue(predictedObject.getServiceName() + ":"+ predictedObject.getResponceTims());
 
-			cell6 = row.createCell(5);
+			Cell cell6 = row.createCell(5);
 			cell6.setCellValue(obj.getActualList().get(2).getServiceName() + ":"+ obj.getActualList().get(2).getResponceTims());
-			cell7 = row.createCell(6);
-			cell7.setCellValue(obj.getPredictedList().get(2).getServiceName() + ":"+ obj.getPredictedList().get(2).getResponceTims());
+			predictedObject = ServiceObject.returnServiceObjectByServiceName(obj.getPredictedList(),obj.getActualList().get(2).getServiceName());
+			Cell cell7 = row.createCell(6);
+			cell7.setCellValue(predictedObject.getServiceName() + ":"+ predictedObject.getResponceTims());
 
-			cell8 = row.createCell(7);
+			Cell cell8 = row.createCell(7);
 			cell8.setCellValue(obj.getActualList().get(3).getServiceName() + ":"+ obj.getActualList().get(3).getResponceTims());
-			cell9 = row.createCell(8);
-			cell9.setCellValue(obj.getPredictedList().get(3).getServiceName() + ":"+ obj.getPredictedList().get(3).getResponceTims());
+			predictedObject = ServiceObject.returnServiceObjectByServiceName(obj.getPredictedList(),obj.getActualList().get(3).getServiceName());
+			Cell cell9 = row.createCell(8);
+			cell9.setCellValue(predictedObject.getServiceName() + ":"+ predictedObject.getResponceTims());
 
 		}
-		try {
-			FileOutputStream out = new FileOutputStream(new File(path));
-			workbook.write(out);
+		try (FileOutputStream out = new FileOutputStream(new File(path))){
+			wb.write(out);
 			out.close();
-			workbook.close();
+			wb.close();
 			System.out.println("Excel real and predicted values written successfully..");
 
 		} catch (FileNotFoundException e) {
