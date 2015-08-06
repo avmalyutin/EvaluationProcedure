@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import weka.core.Instance;
 import weka.core.Instances;
@@ -36,7 +37,9 @@ public class MainClassV2 {
 		
 		File [] files = folder.listFiles();
 		
-		for(int i=0; i<files.length; i++){
+		for(int i=0; i<1; i++){
+			
+			long startTime = System.nanoTime();
 			
 			File fileToExtract = new File(files[i].getAbsolutePath());
 			
@@ -100,6 +103,20 @@ public class MainClassV2 {
         	//writing the evaluation results
         	String evaluationPathForAccuracy = files[i].getAbsolutePath() + "//" + fileToExtract.getName() + "_" + i + "finalResults.xls";
         	GroupAccuracy.writeGroupArray(new File(evaluationPathForAccuracy), listOfAccuracy);
+        	
+        	
+        	long endTime = System.nanoTime();
+
+        	long duration = (endTime - startTime)/1000000;
+        	
+        	String time = String.format("%d min, %d sec", 
+        		    TimeUnit.MILLISECONDS.toMinutes(duration),
+        		    TimeUnit.MILLISECONDS.toSeconds(duration) - 
+        		    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration))
+        		);
+        	
+        	System.out.println("Spended time: " + time);
+        	
         	
 		}
 		

@@ -60,6 +60,35 @@ public class EvaluationProcedure {
 	}
 	
 	
+	public int proceedUserEvaluation(UserEvaluationClass object){
+		
+		String nameActualGoodService = this.getTheLeastRankingActualServiceName();
+		
+		if(object.getCounter() >= UserEvaluationClass.MAX_COUNTER){
+			object.resetData();
+		}
+		
+		for(ServiceObject obj: actualList){
+			if(!object.getMapOfServices().containsKey(obj.getServiceName())){
+				object.getMapOfServices().put(obj.getServiceName(), obj.getResponceTims());
+				if(obj.getServiceName().equals(nameActualGoodService))
+					return 1;
+				else
+					return 0;
+			}
+		}
+		
+		String namePredicted = object.getTheBestService();
+		object.incrementCounter();
+		
+		if(nameActualGoodService.equals(namePredicted))
+			return 1;
+		else
+			return 0;
+	}
+	
+	
+	
 	public int proceedSimpleEvaluation(){
 		
 		String namePredicted = this.getTheLeastRankingPredictedServiceName(); 

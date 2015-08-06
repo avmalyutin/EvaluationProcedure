@@ -21,14 +21,16 @@ public class GroupAccuracy {
 	
 
 	private int randomRigthCount;
+	private int userRightCount;
 	private int simpleRigthCount;
 	private int gapRightCount;
 	private int attempsCount;
 	
 	
-	public void addCounters(int randomCounter, int simpleCounter, int gapCounter, int totalCounters){
+	public void addCounters(int randomCounter, int userCounter, int simpleCounter, int gapCounter, int totalCounters){
 		
 		this.randomRigthCount += randomCounter;
+		this.userRightCount += userCounter;
 		this.simpleRigthCount += simpleCounter;
 		this.gapRightCount += gapCounter;
 		this.attempsCount += totalCounters;
@@ -36,6 +38,10 @@ public class GroupAccuracy {
 	
 	public float calculateRandomAccuracy(){
 		return ((float)this.randomRigthCount/this.attempsCount)*100;
+	}
+	
+	public float calculateUserAccuracy(){
+		return ((float)this.userRightCount/this.attempsCount)*100;
 	}
 	
 	public float calculateSimpleAccuracy(){
@@ -61,9 +67,11 @@ public class GroupAccuracy {
 			Cell cell2 = row.createCell(1);
 			cell2.setCellValue((float)obj.calculateRandomAccuracy());
 			Cell cell3 = row.createCell(2);
-			cell3.setCellValue((float)obj.calculateSimpleAccuracy());
+			cell3.setCellValue((float)obj.calculateUserAccuracy());
 			Cell cell4 = row.createCell(3);
-			cell4.setCellValue((float)obj.calculateTopGapAccuracy());
+			cell4.setCellValue((float)obj.calculateSimpleAccuracy());
+			Cell cell5 = row.createCell(4);
+			cell5.setCellValue((float)obj.calculateTopGapAccuracy());
 			    		
 		}
 		
@@ -77,6 +85,8 @@ public class GroupAccuracy {
 		cell3.setCellFormula("AVERAGE(C1:C"+ (rownum - 1)+")");
 		Cell cell4 = row.createCell(3);
 		cell4.setCellFormula("AVERAGE(D1:D"+ (rownum - 1)+")");
+		Cell cell5 = row.createCell(4);
+		cell5.setCellFormula("AVERAGE(E1:E"+ (rownum - 1)+")");
 		
 		
 	    try {
@@ -95,10 +105,6 @@ public class GroupAccuracy {
 	}
 	
 	
-	
-	
-	
-	
 	public String getFile() {
 		return file;
 	}
@@ -106,6 +112,5 @@ public class GroupAccuracy {
 	public void setFile(String file) {
 		this.file = file;
 	}
-
 	
 }

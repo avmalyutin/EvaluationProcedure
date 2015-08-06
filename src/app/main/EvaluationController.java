@@ -28,6 +28,7 @@ public class EvaluationController {
 	private GroupAccuracy groupAccuracy;
 	
 	private static String RANDOM_LABEL = "Random";
+	private static String USER_LABEL = "USER";
 	private static String TOP1_LABEL = "Top1";
 	private static String TOPGAP_LABEL = "TopGap";
 	
@@ -39,9 +40,11 @@ public class EvaluationController {
 		ArrayList<EvaluationData> list1 = new ArrayList<EvaluationData>();
 		this.listOfEvaluatioObjects.put(RANDOM_LABEL, list1);
 		ArrayList<EvaluationData> list2 = new ArrayList<EvaluationData>();
-		this.listOfEvaluatioObjects.put(TOP1_LABEL, list2);
+		this.listOfEvaluatioObjects.put(USER_LABEL, list2);
 		ArrayList<EvaluationData> list3 = new ArrayList<EvaluationData>();
-		this.listOfEvaluatioObjects.put(TOPGAP_LABEL, list3);
+		this.listOfEvaluatioObjects.put(TOP1_LABEL, list3);
+		ArrayList<EvaluationData> list4 = new ArrayList<EvaluationData>();
+		this.listOfEvaluatioObjects.put(TOPGAP_LABEL, list4);
 		
 		this.groupAccuracy = new GroupAccuracy();
 		
@@ -67,13 +70,15 @@ public class EvaluationController {
     	
     	int counter = 0;
     	int randomEvaluationCounter = 0;
+    	int userEvaluationCounter = 0;
     	int simpleEvaluationCounter = 0;
     	int topRangeEvaluationCounter = 0;
     	float percentageRandomEval = 0;
+    	float percentageUserEval = 0;
     	float percentageSimpleEval = 0;
     	float percentageTopRange = 0;
     	
-    	
+    	UserEvaluationClass userEvaluation = new UserEvaluationClass();
     	
     	Iterator<Entry<Double, EvaluationProcedure>> it = map.entrySet().iterator();
 	    while (it.hasNext()) {
@@ -83,13 +88,16 @@ public class EvaluationController {
 	    	EvaluationProcedure obj = (EvaluationProcedure)imp.getValue();
 	    	obj.predictAndCalculate(respTimePer, costOpPerc);
 	    	int x = obj.proceedRandomEvaluation();
+	    	int x2 = obj.proceedUserEvaluation(userEvaluation);
 	    	int y = obj.proceedSimpleEvaluation();
 	    	int z = obj.processTopRangeEvaluation(gapPerc);
 	    	randomEvaluationCounter = randomEvaluationCounter + x;
+	    	userEvaluationCounter = userEvaluationCounter + x2;
 	    	simpleEvaluationCounter = simpleEvaluationCounter + y;
 	    	topRangeEvaluationCounter = topRangeEvaluationCounter + z;
 	   
 	    	percentageRandomEval = (float)randomEvaluationCounter*100/counter;
+	    	percentageUserEval = (float)userEvaluationCounter*100/counter;
 	    	percentageSimpleEval = (float)simpleEvaluationCounter*100/counter;
 	    	percentageTopRange = (float)topRangeEvaluationCounter*100/counter;
 	    	
@@ -102,12 +110,18 @@ public class EvaluationController {
 	    }
     	
 	    
-	    UtilityClass.writeRealAndPredictedValues(pathToSave + "//generated_profiled_realAndPredicted.csv", map);
+	    UtilityClass.writeRealAndPredictedValuesXLS(pathToSave + "//generated_profiled_realAndPredicted.xls", map);
 
+	    UtilityClass.writeRealAndPredictedValuesCSV(pathToSave + "//generated_profiled_realAndPredicted.csv", map);
+	    
     	System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     	System.out.println("Random evaluation");
     	System.out.println("Total: " + counter + " Right: " + randomEvaluationCounter);
     	System.out.println("Percentage:" + percentageRandomEval);
+    	System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+    	System.out.println("User evaluation");
+    	System.out.println("Total: " + counter + " Right: " + userEvaluationCounter);
+    	System.out.println("Percentage:" + percentageUserEval);
     	System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     	System.out.println("Simple evaluation");
     	System.out.println("Total: " + counter + " Right: " + simpleEvaluationCounter);
@@ -118,14 +132,16 @@ public class EvaluationController {
     	System.out.println("Percentage:" + percentageTopRange);
     	
     	EvaluationData objectRandom = new EvaluationData(index, randomEvaluationCounter, counter, percentageRandomEval);
+    	EvaluationData objectUserEval = new EvaluationData(index, userEvaluationCounter, counter, percentageUserEval);
     	EvaluationData objectTopOne = new EvaluationData(index, simpleEvaluationCounter, counter, percentageSimpleEval);
     	EvaluationData objectTopGap = new EvaluationData(index, topRangeEvaluationCounter, counter, percentageTopRange);
     	
     	listOfEvaluatioObjects.get(RANDOM_LABEL).add(objectRandom);
+    	listOfEvaluatioObjects.get(USER_LABEL).add(objectUserEval);
     	listOfEvaluatioObjects.get(TOP1_LABEL).add(objectTopOne);
     	listOfEvaluatioObjects.get(TOPGAP_LABEL).add(objectTopGap);
     	
-    	this.groupAccuracy.addCounters(randomEvaluationCounter, simpleEvaluationCounter, topRangeEvaluationCounter, counter); 
+    	this.groupAccuracy.addCounters(randomEvaluationCounter, userEvaluationCounter, simpleEvaluationCounter, topRangeEvaluationCounter, counter); 
     	
 	}
 	
@@ -166,6 +182,9 @@ public class EvaluationController {
 			cell3.setCellFormula("SUM(C1:C" + (rownum - 1) + ")");
 			Cell cell4 = row.createCell(3);
 			cell4.setCellFormula("SUM(D1:D" + (rownum - 1) + ")/"
+					+ (rownum - 1));
+			Cell cell5 = row.createCell(4);
+			cell5.setCellFormula("SUM(E1:E" + (rownum - 1) + ")/"
 					+ (rownum - 1));
 
 		}

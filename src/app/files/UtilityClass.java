@@ -325,7 +325,7 @@ public class UtilityClass {
 	
 	
 	
-	public static void writeRealAndPredictedValues(String path, HashMap<Double, EvaluationProcedure> map){
+	public static void writeRealAndPredictedValuesXLS(String path, HashMap<Double, EvaluationProcedure> map){
 		
 		Sheet sheet = null;
 		int rownum = 0;
@@ -446,6 +446,91 @@ public class UtilityClass {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	public static void writeRealAndPredictedValuesCSV(String path, HashMap<Double, EvaluationProcedure> map){
+		
+		boolean initialCreate = false;
+		
+		try{
+			File f = new File(path);
+			initialCreate = f.createNewFile();
+		}
+		catch(IOException ex){
+			ex.printStackTrace();
+		}
+		
+		
+		try(FileWriter writer = new FileWriter(path, true)){
+			
+			if(initialCreate){
+				//write the header
+				writer.append("Date and time");
+				writer.append(';');
+				writer.append("Service 1 real");
+				writer.append(';');
+				writer.append("Service 1 predicted");
+				writer.append(';');
+				writer.append("Service 2 real");
+				writer.append(';');
+				writer.append("Service 2 predicted");
+				writer.append(';');
+				writer.append("Service 3 real");
+				writer.append(';');
+				writer.append("Service 3 predicted");
+				writer.append(';');
+				writer.append("Service 4 real");
+				writer.append(';');
+				writer.append("Service 4 predicted");
+				writer.append('\n');
+				
+			}
+			
+			Iterator<Entry<Double, EvaluationProcedure>> it = map.entrySet().iterator();
+			
+			while (it.hasNext()) {
+			
+				Map.Entry imp = (Map.Entry) it.next();
+
+				EvaluationProcedure obj = (EvaluationProcedure) imp.getValue();
+			
+				writer.append(UtilityClass.convertDoubleToString(obj.getDate()));
+				writer.append(';');
+				
+				writer.append(obj.getActualList().get(0).getResponceTims()+"");
+				writer.append(';');
+				ServiceObject predictedObject = ServiceObject.returnServiceObjectByServiceName(obj.getPredictedList(),obj.getActualList().get(0).getServiceName());
+				writer.append(predictedObject.getResponceTims()+"");
+				writer.append(';');
+				
+				writer.append(obj.getActualList().get(1).getResponceTims()+"");
+				writer.append(';');
+				predictedObject = ServiceObject.returnServiceObjectByServiceName(obj.getPredictedList(),obj.getActualList().get(1).getServiceName());
+				writer.append(predictedObject.getResponceTims()+"");
+				writer.append(';');
+				
+				writer.append(obj.getActualList().get(2).getResponceTims()+"");
+				writer.append(';');
+				predictedObject = ServiceObject.returnServiceObjectByServiceName(obj.getPredictedList(),obj.getActualList().get(2).getServiceName());
+				writer.append(predictedObject.getResponceTims()+"");
+				writer.append(';');
+				
+				writer.append(obj.getActualList().get(3).getResponceTims()+"");
+				writer.append(';');
+				predictedObject = ServiceObject.returnServiceObjectByServiceName(obj.getPredictedList(),obj.getActualList().get(3).getServiceName());
+				writer.append(predictedObject.getResponceTims()+"");
+				writer.append('\n');
+			}
+			
+			 writer.flush();
+			 writer.close();
+		}
+		catch(IOException ex){
+			ex.printStackTrace();
+		}
+
+	}
+
 	
 	
 	
