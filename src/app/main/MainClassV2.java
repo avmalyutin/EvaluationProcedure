@@ -69,10 +69,8 @@ public class MainClassV2 {
 			ArrayList<Instances> listToCheckProcess = UtilityClass.splitInstancesArrayToArrays(generalSet, generalSet.numInstances());
 			
 			listToCheckProcess.sort(new Comparator<Instances>() {
-
 				@Override
 				public int compare(Instances o1, Instances o2) {
-					
 					double value1 = o1.instance(0).value(1);
 					double value2 = o2.instance(0).value(1);
 					return (int) (value1-value2);
@@ -97,6 +95,11 @@ public class MainClassV2 {
         	controller.writeEvaluationResults(new File(evaluationPath));
         	controller.getGroupAccuracy().setFile(evaluationPath);
         	listOfAccuracy.add(controller.getGroupAccuracy());
+        	
+        	
+        	//writing the evaluation results
+        	String evaluationPathForAccuracy = files[i].getAbsolutePath() + "//" + fileToExtract.getName() + "_" + i + "finalResults.xls";
+        	GroupAccuracy.writeGroupArray(new File(evaluationPathForAccuracy), listOfAccuracy);
         	
 		}
 		
