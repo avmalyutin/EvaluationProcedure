@@ -448,9 +448,29 @@ public class UtilityClass {
 	}
 	
 	
-	public static void writeRealAndPredictedValuesCSV(String path, HashMap<Double, EvaluationProcedure> map){
+	public static void writeRealAndPredictedValuesCSVAll(String path, HashMap<Double, EvaluationProcedure> map) {
+
+		Iterator<Entry<Double, EvaluationProcedure>> it = map.entrySet().iterator();
+
+		while (it.hasNext()) {
+
+			Map.Entry imp = (Map.Entry) it.next();
+
+			EvaluationProcedure obj = (EvaluationProcedure) imp.getValue();
+
+			for (ServiceObject object228 : obj.getActualList()) {
+				UtilityClass.writeRealAndPredictedValuesCSVOneInstance(path, obj, 
+						object228);
+			}
+		}
+	}
+	
+	
+	
+	public static void writeRealAndPredictedValuesCSVOneInstance(String pathPref, EvaluationProcedure obj, ServiceObject object228){
 		
 		boolean initialCreate = false;
+		String path = pathPref + "_" + object228.getServiceName() + ".csv";
 		
 		try{
 			File f = new File(path);
@@ -465,61 +485,43 @@ public class UtilityClass {
 			
 			if(initialCreate){
 				//write the header
-				writer.append("Date and Time");
+				writer.append("Date Time");
 				writer.append(';');
-				writer.append("Service 1 real");
+				writer.append("Service");
 				writer.append(';');
-				writer.append("Service 1 predicted");
-				writer.append(';');
-				writer.append("Service 2 real");
-				writer.append(';');
-				writer.append("Service 2 predicted");
-				writer.append(';');
-				writer.append("Service 3 real");
-				writer.append(';');
-				writer.append("Service 3 predicted");
-				writer.append(';');
-				writer.append("Service 4 real");
-				writer.append(';');
-				writer.append("Service 4 predicted");
+				writer.append("Response time intermediary");
 				writer.append('\n');
 				
-			}
-			
-			Iterator<Entry<Double, EvaluationProcedure>> it = map.entrySet().iterator();
-			
-			while (it.hasNext()) {
-			
-				Map.Entry imp = (Map.Entry) it.next();
-
-				EvaluationProcedure obj = (EvaluationProcedure) imp.getValue();
+				//write the R file
+				UtilityClass.writeRFileOneInstance(pathPref + "_" + object228.getServiceName());
 				
-				int counter = 2;
-				for(ServiceObject object228 : obj.getActualList()){
-					
-					writer.append(UtilityClass.convertDoubleToString(obj.getDate()));
-					writer.append(',');
-					writer.append(counter+"");
-					writer.append(';');
-					writer.append(object228.getServiceName()+" real");
-					writer.append(';');
-					writer.append(object228.getResponceTims()+"");
-					writer.append('\n');
-					
-					counter++;
-					writer.append(UtilityClass.convertDoubleToString(obj.getDate()));
-					writer.append(',');
-					writer.append(counter+"");
-					writer.append(';');
-					ServiceObject predictedObject = ServiceObject.returnServiceObjectByServiceName(obj.getPredictedList(),object228.getServiceName());
-					writer.append(predictedObject.getServiceName()+" predicted");
-					writer.append(';');
-					writer.append(predictedObject.getResponceTims()+"");
-					writer.append('\n');
-					
-					counter++;
-				}
+				
+				
 			}
+			
+			int counter = 2;
+
+			writer.append(UtilityClass.convertDoubleToString(obj.getDate()));
+			writer.append(',');
+			writer.append(counter + "");
+			writer.append(';');
+			writer.append(object228.getServiceName() + " real");
+			writer.append(';');
+			writer.append(object228.getResponceTims() + "");
+			writer.append('\n');
+
+			counter++;
+			writer.append(UtilityClass.convertDoubleToString(obj.getDate()));
+			writer.append(',');
+			writer.append(counter + "");
+			writer.append(';');
+			ServiceObject predictedObject = ServiceObject
+					.returnServiceObjectByServiceName(obj.getPredictedList(),
+							object228.getServiceName());
+			writer.append(predictedObject.getServiceName() + " predicted");
+			writer.append(';');
+			writer.append(predictedObject.getResponceTims() + "");
+			writer.append('\n');
 			
 			 writer.flush();
 			 writer.close();
@@ -530,6 +532,43 @@ public class UtilityClass {
 
 	}
 
+
+	public static void writeRFileOneInstance(String path){
+		
+		try(FileWriter writer = new FileWriter(path + ".R", true)){
+			
+			writer.append("library(ggplot2)");
+			writer.append("\n");
+			writer.append("library(plyr)");
+			writer.append("\n");
+			writer.append("library(scales)");
+			writer.append("\n");
+			writer.append("library(reshape2)");
+			writer.append("\n");
+			writer.append("library(grid)");
+			writer.append("\n");
+			writer.append("Sys.setlocale(\"LC_TIME\", \"English\")");
+			writer.append("\n");
+			writer.append("ds1 <- read.csv(\"" + path.replace("\\", "//") + ".csv\", header = TRUE, sep = \";\", quote = \"  \\\"  \", dec = \".\", fill = TRUE, comment.char = \"#\", check.names = FALSE)");
+			writer.append("\n");
+			writer.append("ds1$`Date Time` <- strptime(ds1$`Date Time`, \"%Y-%m-%d %H:%M:%S\")");
+			writer.append("\n");
+			writer.append("p <- ggplot(ds1, aes(x=`Date Time`, y=`Response time intermediary`, color=Service, group=Service, shape=Service))+ scale_x_datetime(breaks = date_breaks(\"1 day\"), labels = date_format(\"%a %d.%m.\")) + theme(panel.background = element_rect(fill = \"white\"), panel.grid.major = element_line(colour = \"#E6E6E6\"), axis.text.x = element_text(angle = 90, hjust = 1), legend.position = \"bottom\", legend.margin = unit(-0.5, \"cm\"), legend.key = element_rect(fill = \"white\")) + xlab(\"Day\") + ylab(\"Response Time\") + ggtitle(\"Graphs\") + geom_point(size=1.15)  + scale_colour_grey() + scale_shape_discrete(solid = TRUE)");
+			writer.append("\n");
+			writer.append("ggsave(\"" + path.replace("\\", "//") + ".pdf\", p, width=11, height=8.5)");
+			writer.append("\n");
+
+			writer.flush();
+			writer.close();
+		}
+		catch(IOException ex){
+			ex.printStackTrace();
+		}
+		
+		
+		
+	}
+	
 	
 	
 	
@@ -551,7 +590,7 @@ public class UtilityClass {
 		
 		long itemLong = (long) (date);
 		Date itemDate = new Date(itemLong);
-		String itemDateStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH).format(itemDate);
+		String itemDateStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(itemDate);
 		return itemDateStr;
 	} 
 	

@@ -112,7 +112,7 @@ public class EvaluationController {
 	    
 	    UtilityClass.writeRealAndPredictedValuesXLS(pathToSave + "//generated_profiled_realAndPredicted.xls", map);
 
-	    UtilityClass.writeRealAndPredictedValuesCSV(pathToSave + "//generated_profiled_realAndPredicted.csv", map);
+	    UtilityClass.writeRealAndPredictedValuesCSVAll(pathToSave + "//generated_profiled_realAndPredicted", map);
 	    
     	System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     	System.out.println("Random evaluation");

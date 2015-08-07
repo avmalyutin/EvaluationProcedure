@@ -30,8 +30,7 @@ public class DeleteScript {
 									.getName().contains(".xls"))) {
 						wegf234[j].delete();
 					}
-					if (wegf234[j].getName().contains("realAndPredicted")
-							&& wegf234[j].getName().contains(".csv")) {
+					if (wegf234[j].getName().contains("realAndPredicted")) {
 						wegf234[j].delete();
 					}
 				}
