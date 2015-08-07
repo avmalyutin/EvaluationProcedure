@@ -465,7 +465,7 @@ public class UtilityClass {
 			
 			if(initialCreate){
 				//write the header
-				writer.append("Date and time");
+				writer.append("Date and Time");
 				writer.append(';');
 				writer.append("Service 1 real");
 				writer.append(';');
@@ -493,33 +493,32 @@ public class UtilityClass {
 				Map.Entry imp = (Map.Entry) it.next();
 
 				EvaluationProcedure obj = (EvaluationProcedure) imp.getValue();
-			
-				writer.append(UtilityClass.convertDoubleToString(obj.getDate()));
-				writer.append(';');
 				
-				writer.append(obj.getActualList().get(0).getResponceTims()+"");
-				writer.append(';');
-				ServiceObject predictedObject = ServiceObject.returnServiceObjectByServiceName(obj.getPredictedList(),obj.getActualList().get(0).getServiceName());
-				writer.append(predictedObject.getResponceTims()+"");
-				writer.append(';');
-				
-				writer.append(obj.getActualList().get(1).getResponceTims()+"");
-				writer.append(';');
-				predictedObject = ServiceObject.returnServiceObjectByServiceName(obj.getPredictedList(),obj.getActualList().get(1).getServiceName());
-				writer.append(predictedObject.getResponceTims()+"");
-				writer.append(';');
-				
-				writer.append(obj.getActualList().get(2).getResponceTims()+"");
-				writer.append(';');
-				predictedObject = ServiceObject.returnServiceObjectByServiceName(obj.getPredictedList(),obj.getActualList().get(2).getServiceName());
-				writer.append(predictedObject.getResponceTims()+"");
-				writer.append(';');
-				
-				writer.append(obj.getActualList().get(3).getResponceTims()+"");
-				writer.append(';');
-				predictedObject = ServiceObject.returnServiceObjectByServiceName(obj.getPredictedList(),obj.getActualList().get(3).getServiceName());
-				writer.append(predictedObject.getResponceTims()+"");
-				writer.append('\n');
+				int counter = 2;
+				for(ServiceObject object228 : obj.getActualList()){
+					
+					writer.append(UtilityClass.convertDoubleToString(obj.getDate()));
+					writer.append(',');
+					writer.append(counter+"");
+					writer.append(';');
+					writer.append(object228.getServiceName()+" real");
+					writer.append(';');
+					writer.append(object228.getResponceTims()+"");
+					writer.append('\n');
+					
+					counter++;
+					writer.append(UtilityClass.convertDoubleToString(obj.getDate()));
+					writer.append(',');
+					writer.append(counter+"");
+					writer.append(';');
+					ServiceObject predictedObject = ServiceObject.returnServiceObjectByServiceName(obj.getPredictedList(),object228.getServiceName());
+					writer.append(predictedObject.getServiceName()+" predicted");
+					writer.append(';');
+					writer.append(predictedObject.getResponceTims()+"");
+					writer.append('\n');
+					
+					counter++;
+				}
 			}
 			
 			 writer.flush();
