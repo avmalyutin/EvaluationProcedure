@@ -81,15 +81,11 @@ public class MainClassV2 {
 			});
 			
 			
-			//int firstBlood = 50;
-			//for(int g = 0; g<firstBlood; g++)
-			//model.trainFromInstances(listToCheckProcess.get(0));
 			
 			for(int k = 0; k<listToCheckProcess.size() - 2; k++){
 				model.trainFromInstances(listToCheckProcess.get(k));
 				controller.setModel(model);
 				controller.evaluateData(k, files[i].getAbsolutePath(), new File(generalFile), listToCheckProcess.get(k + 1), 100, 0, 10);
-				
 			}
 			
         	
@@ -105,6 +101,19 @@ public class MainClassV2 {
         	GroupAccuracy.writeGroupArray(new File(evaluationPathForAccuracy), listOfAccuracy);
         	
         	
+        	insideFolder = files[i].listFiles();
+        	//building graphs
+        	for(int j=0; j < insideFolder.length; j++){
+				if(insideFolder[j].getName().contains("generated_profiled_realAndPredicted") && 
+						insideFolder[j].getName().contains(".R")){
+					//execute script
+					UtilityClass.runScript(insideFolder[j].getAbsolutePath(), insideFolder[j].getAbsolutePath());
+				}
+        	}
+        	
+        	
+        	
+        	
         	long endTime = System.nanoTime();
 
         	long duration = (endTime - startTime)/1000000;
@@ -116,7 +125,6 @@ public class MainClassV2 {
         		);
         	
         	System.out.println("Spended time: " + time);
-        	
         	
 		}
 		

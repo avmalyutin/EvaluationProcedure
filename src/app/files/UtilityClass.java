@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -42,6 +44,7 @@ import app.model.ServiceObject;
 
 public class UtilityClass {
 	
+	private static final String R_CMD = "\"C:\\Program Files\\R\\R-3.2.1\\bin\\R.exe\" CMD BATCH --vanilla --slave ";
 	
 	public static Instances readInstancesFromFile(String filePath){
 		try{
@@ -350,13 +353,8 @@ public class UtilityClass {
 	            sheet = wb.getSheetAt(0);
 			}
 			
-
 			rownum = sheet.getLastRowNum();
             if(rownum == 0){
-            	//rownum = rownum + 1;
-            	
-            	//EvaluationProcedure eval = map.entrySet().iterator().next().getValue();
-            	
             	
             	Row rowTitle = sheet.createRow(rownum);
         	    Cell cell1 = rowTitle.createCell(0);
@@ -495,8 +493,6 @@ public class UtilityClass {
 				//write the R file
 				UtilityClass.writeRFileOneInstance(pathPref + "_" + object228.getServiceName());
 				
-				
-				
 			}
 			
 			int counter = 2;
@@ -549,11 +545,11 @@ public class UtilityClass {
 			writer.append("\n");
 			writer.append("Sys.setlocale(\"LC_TIME\", \"English\")");
 			writer.append("\n");
-			writer.append("ds1 <- read.csv(\"" + path.replace("\\", "//") + ".csv\", header = TRUE, sep = \";\", quote = \"  \\\"  \", dec = \".\", fill = TRUE, comment.char = \"#\", check.names = FALSE)");
+			writer.append("ds1 <- read.csv(\"" + path.replace("\\", "//") + ".csv\", header = TRUE, sep = \";\", quote = \"\\\"\", dec = \".\", fill = TRUE, comment.char = \"#\", check.names = FALSE)");
 			writer.append("\n");
 			writer.append("ds1$`Date Time` <- strptime(ds1$`Date Time`, \"%Y-%m-%d %H:%M:%S\")");
 			writer.append("\n");
-			writer.append("p <- ggplot(ds1, aes(x=`Date Time`, y=`Response time intermediary`, color=Service, group=Service, shape=Service))+ scale_x_datetime(breaks = date_breaks(\"1 day\"), labels = date_format(\"%a %d.%m.\")) + theme(panel.background = element_rect(fill = \"white\"), panel.grid.major = element_line(colour = \"#E6E6E6\"), axis.text.x = element_text(angle = 90, hjust = 1), legend.position = \"bottom\", legend.margin = unit(-0.5, \"cm\"), legend.key = element_rect(fill = \"white\")) + xlab(\"Day\") + ylab(\"Response Time\") + ggtitle(\"Graphs\") + geom_point(size=1.15)  + scale_colour_grey() + scale_shape_discrete(solid = TRUE)");
+			writer.append("p <- ggplot(ds1, aes(x=`Date Time`, y=`Response time intermediary`, color=Service, group=Service, shape=Service))+ scale_x_datetime(breaks = date_breaks(\"1 day\"), labels = date_format(\"%a %d.%m.\")) + theme(panel.background = element_rect(fill = \"white\"), panel.grid.major = element_line(colour = \"#E6E6E6\"), axis.text.x = element_text(angle = 90, hjust = 1), legend.position = \"bottom\", legend.margin = unit(-0.5, \"cm\"), legend.key = element_rect(fill = \"white\")) + xlab(\"Day\") + ylab(\"Response Time\") + ggtitle(\"Graphs\") + geom_point(size=1.15)  + scale_colour_hue() + scale_shape_discrete(solid = TRUE) + geom_smooth()");
 			writer.append("\n");
 			writer.append("ggsave(\"" + path.replace("\\", "//") + ".pdf\", p, width=11, height=8.5)");
 			writer.append("\n");
@@ -564,13 +560,21 @@ public class UtilityClass {
 		catch(IOException ex){
 			ex.printStackTrace();
 		}
-		
-		
-		
 	}
 	
 	
-	
+	public static void runScript(List<String> rScripts, String path) throws IOException {
+		for (String rScript : rScripts) {
+			runScript(rScript, path);
+		}
+		
+	}
+
+	public static void runScript(String rScriptPath, String path)
+			throws IOException {
+		String pathToExecute = R_CMD + "\"" + rScriptPath + "\"";
+		Runtime.getRuntime().exec(pathToExecute);
+	}
 	
 	
 	public static double convertStrToDouble(String date){
