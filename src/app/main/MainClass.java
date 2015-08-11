@@ -19,8 +19,8 @@ public class MainClass {
 	
 
 	//paths
-	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//6. Diff levels";
-	private static final int NUMBER_ARRAYS = 10;
+	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//9. New Set";
+	private static final int NUMBER_ARRAYS = 20;
 	private static final String OP_COST_FILE = "E://SwedenData//NewLife//opCost//operationCost.csv";
 	
 	//other stuff
@@ -73,7 +73,6 @@ public class MainClass {
 			
 			ArrayList<Instances> listToTrainingProcess = UtilityClass.splitInstancesArrayToArrays(train, NUMBER_ARRAYS);
 			ArrayList<Instances> listToTestProcess = UtilityClass.splitInstancesArrayToArrays(test, NUMBER_ARRAYS);
-			
 			
 			
 			for(int k=0; k<listToTrainingProcess.size() - 2; k++){

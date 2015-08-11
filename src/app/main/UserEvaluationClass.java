@@ -6,7 +6,7 @@ import java.util.Map;
 public class UserEvaluationClass {
 	
 	
-	public static int MAX_COUNTER = 100;
+	public static int MAX_COUNTER = 25;
 	private int counter;
 	private Map<String, Integer> mapOfServices;
 	

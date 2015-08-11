@@ -18,7 +18,7 @@ import app.model.MainModel;
 public class MainClassV2 {
 	
 	//paths
-	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//6. Diff levels";
+	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//7. Small peaks small set";
 	private static final String OP_COST_FILE = "E://SwedenData//NewLife//opCost//operationCost.csv";
 	
 	//other stuff
@@ -28,11 +28,9 @@ public class MainClassV2 {
 	public static void main(String [] args) throws Exception{
 		
 		DeleteScript.deleteEvaluationResults(MainClassV2.ROOT_PATH_PREF);
-		
 		operationCost = UtilityClass.extractCostFuncFromCVS(OP_COST_FILE);
 		
 		File folder = new File(ROOT_PATH_PREF);
-		
 		ArrayList<GroupAccuracy> listOfAccuracy = new ArrayList<GroupAccuracy>();
 		
 		File [] files = folder.listFiles();
