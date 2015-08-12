@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import weka.core.Instance;
 import weka.core.Instances;
@@ -19,7 +20,7 @@ public class MainClass {
 	
 
 	//paths
-	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//9. New Set";
+	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//1. First experiment";
 	private static final int NUMBER_ARRAYS = 20;
 	private static final String OP_COST_FILE = "E://SwedenData//NewLife//opCost//operationCost.csv";
 	
@@ -28,6 +29,8 @@ public class MainClass {
 	
 	
 	public static void main(String [] args) throws Exception{
+		
+		long startTime = System.nanoTime();
 		
 		DeleteScript.deleteEvaluationResults(MainClass.ROOT_PATH_PREF);
 		
@@ -92,6 +95,20 @@ public class MainClass {
 		
 		
 		GroupAccuracy.writeGroupArray(new File(ROOT_PATH_PREF + "//final.xls"), listOfAccuracy);
+		
+		long endTime = System.nanoTime();
+
+    	long duration = (endTime - startTime)/1000000;
+    	
+    	String time = String.format("%d min, %d sec", 
+    		    TimeUnit.MILLISECONDS.toMinutes(duration),
+    		    TimeUnit.MILLISECONDS.toSeconds(duration) - 
+    		    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration))
+    		);
+    	
+    	System.out.println("Spended time: " + time);
+		
+		
 		
 		System.out.println("Done!");
 		
