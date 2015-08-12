@@ -1,6 +1,7 @@
 package app.main;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 import app.files.UtilityClass;
@@ -29,6 +30,8 @@ public class EvaluationProcedure {
 		ServiceObject obj = new ServiceObject(servicename, Integer.valueOf(responseTime));
 		this.actualList.add(obj);
 		this.predictedList.add(obj);
+		Collections.<ServiceObject>sort(this.actualList);
+		Collections.<ServiceObject>sort(this.predictedList);
 	}
 	
 	public void addReadedItem(String servicename, double responseTime){

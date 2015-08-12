@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Header;
@@ -356,25 +357,37 @@ public class UtilityClass {
 			rownum = sheet.getLastRowNum();
             if(rownum == 0){
             	
+            	ArrayList<ServiceObject> list =map.entrySet().iterator().next().getValue().getActualList();
+            	
             	Row rowTitle = sheet.createRow(rownum);
         	    Cell cell1 = rowTitle.createCell(0);
         	    cell1.setCellValue("Date");
         	    Cell cell2 = rowTitle.createCell(1);
-        	    cell2.setCellValue("Service 1 real");
+        	    cell2.setCellValue(list.get(0).getServiceName() + " real");
         	    Cell cell3 = rowTitle.createCell(2);
-        	    cell3.setCellValue("Service 1 predicted");
+        	    cell3.setCellValue(list.get(0).getServiceName() + " predicted");
         	    Cell cell4 = rowTitle.createCell(3);
-        	    cell4.setCellValue("Service 2 real");
+        	    cell4.setCellValue(list.get(1).getServiceName() + " real");
         	    Cell cell5 = rowTitle.createCell(4);
-        	    cell5.setCellValue("Service 2 predicted");
+        	    cell5.setCellValue(list.get(1).getServiceName() + " predicted");
         	    Cell cell6 = rowTitle.createCell(5);
-        	    cell6.setCellValue("Service 3 real");
+        	    cell6.setCellValue(list.get(2).getServiceName() + " real");
         	    Cell cell7 = rowTitle.createCell(6);
-        	    cell7.setCellValue("Service 3 predicted");
+        	    cell7.setCellValue(list.get(2).getServiceName() + " predicted");
         	    Cell cell8 = rowTitle.createCell(7);
-        	    cell8.setCellValue("Service 4 real");
+        	    cell8.setCellValue(list.get(3).getServiceName() + " real");
         	    Cell cell9 = rowTitle.createCell(8);
-        	    cell9.setCellValue("Service 4 predicted");
+        	    cell9.setCellValue(list.get(3).getServiceName() + " predicted");
+        	    
+        	    Cell cell10 = rowTitle.createCell(10);
+        	    cell10.setCellValue(list.get(0).getServiceName() + " difference");
+        	    Cell cell11 = rowTitle.createCell(11);
+        	    cell11.setCellValue(list.get(1) + " difference");
+        	    Cell cell12 = rowTitle.createCell(12);
+        	    cell12.setCellValue(list.get(2) + " difference");
+        	    Cell cell13 = rowTitle.createCell(13);
+        	    cell13.setCellValue(list.get(3) + " difference");
+        	    
             	
             }
 		}
@@ -405,7 +418,6 @@ public class UtilityClass {
 
 			Cell cell1 = row.createCell(0);
 			cell1.setCellValue(UtilityClass.convertDoubleToString(obj.getDate()));
-			//cell1.setCellValue(obj.getDate());
 			
 			Cell cell2 = row.createCell(1);
 			cell2.setCellValue(obj.getActualList().get(0).getResponceTims());
@@ -430,6 +442,17 @@ public class UtilityClass {
 			predictedObject = ServiceObject.returnServiceObjectByServiceName(obj.getPredictedList(),obj.getActualList().get(3).getServiceName());
 			Cell cell9 = row.createCell(8);
 			cell9.setCellValue(predictedObject.getResponceTims());
+			
+			
+			Cell cell10 = row.createCell(10);
+    	    cell10.setCellFormula("ABS(C" + (rownum+1) + "-B" + (rownum+1) + ")");
+    	    Cell cell11 = row.createCell(11);
+    	    cell11.setCellFormula("ABS(E" + (rownum+1) + "-D" + (rownum+1) + ")");
+    	    Cell cell12 = row.createCell(12);
+    	    cell12.setCellFormula("ABS(G" + (rownum+1) + "-F" + (rownum+1) + ")");
+    	    Cell cell13 = row.createCell(13);
+    	    cell13.setCellFormula("ABS(H" + (rownum+1) + "-I" + (rownum+1) + ")");
+    	    
 
 		}
 		try (FileOutputStream out = new FileOutputStream(new File(path))){

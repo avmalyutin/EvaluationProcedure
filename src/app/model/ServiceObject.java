@@ -7,7 +7,7 @@ import java.util.Random;
 import app.main.MainClass;
 
 
-public class ServiceObject implements Serializable{
+public class ServiceObject implements Serializable, Comparable<ServiceObject>{
 
 	private static final long serialVersionUID = 790955032602057420L;
 	
@@ -123,16 +123,20 @@ public class ServiceObject implements Serializable{
 	}
 	
 	
-	public static ServiceObject returnServiceObjectByServiceName(ArrayList<ServiceObject> list, String serviceName){
-		
-		for(ServiceObject obj:list){
-			if(obj.getServiceName().equals(serviceName))
+	public static ServiceObject returnServiceObjectByServiceName(
+			ArrayList<ServiceObject> list, String serviceName) {
+
+		for (ServiceObject obj : list) {
+			if (obj.getServiceName().equals(serviceName))
 				return obj;
 		}
 		return null;
-		
-		
+
 	}
+	
+	public int compareTo(ServiceObject p) {
+        return this.serviceName.compareTo(p.serviceName);
+    }
 	
 	
 	
