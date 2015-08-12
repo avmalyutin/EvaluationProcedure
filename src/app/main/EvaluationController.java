@@ -32,6 +32,8 @@ public class EvaluationController {
 	private static String TOP1_LABEL = "Top1";
 	private static String TOPGAP_LABEL = "TopGap";
 	
+	private static UserEvaluationClass userEvaluation = new UserEvaluationClass();
+	
 	
 	public EvaluationController(MainModel model1) {
 		super();
@@ -78,7 +80,7 @@ public class EvaluationController {
     	float percentageSimpleEval = 0;
     	float percentageTopRange = 0;
     	
-    	UserEvaluationClass userEvaluation = new UserEvaluationClass();
+    	
     	
     	Iterator<Entry<Double, EvaluationProcedure>> it = map.entrySet().iterator();
 	    while (it.hasNext()) {
