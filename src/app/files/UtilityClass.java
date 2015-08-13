@@ -382,11 +382,11 @@ public class UtilityClass {
         	    Cell cell10 = rowTitle.createCell(10);
         	    cell10.setCellValue(list.get(0).getServiceName() + " difference");
         	    Cell cell11 = rowTitle.createCell(11);
-        	    cell11.setCellValue(list.get(1) + " difference");
+        	    cell11.setCellValue(list.get(1).getServiceName() + " difference");
         	    Cell cell12 = rowTitle.createCell(12);
-        	    cell12.setCellValue(list.get(2) + " difference");
+        	    cell12.setCellValue(list.get(2).getServiceName() + " difference");
         	    Cell cell13 = rowTitle.createCell(13);
-        	    cell13.setCellValue(list.get(3) + " difference");
+        	    cell13.setCellValue(list.get(3).getServiceName() + " difference");
         	    
             	
             }
