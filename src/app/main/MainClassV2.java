@@ -35,7 +35,7 @@ public class MainClassV2 {
 		
 		File [] files = folder.listFiles();
 		
-		for(int i=0; i<files.length; i++){
+		for(int i=0; i<1; i++){
 			
 			long startTime = System.nanoTime();
 			
