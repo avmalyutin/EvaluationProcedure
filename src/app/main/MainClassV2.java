@@ -18,12 +18,11 @@ import app.model.MainModel;
 public class MainClassV2 {
 	
 	//paths
-	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//11. Second experiment";
+	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//16. Third experiment 60 small";
 	private static final String OP_COST_FILE = "E://SwedenData//NewLife//opCost//operationCost.csv";
 	
 	//other stuff
 	public static HashMap<String, Integer> operationCost = new HashMap<String, Integer>();
-	
 	
 	public static void main(String [] args) throws Exception{
 		
@@ -38,7 +37,6 @@ public class MainClassV2 {
 		for(int i=0; i<1; i++){
 			
 			long startTime = System.nanoTime();
-			
 			File fileToExtract = new File(files[i].getAbsolutePath());
 			
 			File [] insideFolder = files[i].listFiles();
@@ -52,8 +50,6 @@ public class MainClassV2 {
 					break;
 				}
 			}
-			
-			
 			
 			TrainAndTestData dataObject = UtilityClass.extractOneSetFromCVS(fileToExtract.getAbsolutePath());
 			
