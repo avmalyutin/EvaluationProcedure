@@ -41,6 +41,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import weka.core.Instance;
 import weka.core.Instances;
 import app.main.EvaluationProcedure;
+import app.model.LocationModule;
 import app.model.ServiceObject;
 
 public class UtilityClass {
@@ -238,6 +239,78 @@ public class UtilityClass {
 			}
 		}
 		return dataObject;
+	}
+	
+	
+	// TODO: make this function work
+	public static void modifyCSVLocation(String filename, String userLocation){
+		
+		BufferedReader br = null;
+		FileWriter writerObject = null;
+		String line = "";
+		String cvsSplitBy = ",";
+		try {
+		 
+			writerObject = new FileWriter(filename+"_location.csv", true);			
+			br = new BufferedReader(new FileReader(filename));
+
+			writerObject.append(br.readLine());
+			writerObject.append("\n");
+			writerObject.append(br.readLine());
+			writerObject.append("\n");
+			while ((line = br.readLine()) != null) {
+		
+				String[] country = line.split(cvsSplitBy);
+					
+				if(country.length == 2){
+					String[] info = country[1].split(";");
+					String date = country[0];
+					String nameServer = info[1];
+					int delay = LocationModule.getDistanceByTwoPlaces(userLocation, nameServer);
+					int responceTime = Integer.valueOf(info[2]);
+					writerObject.append(date + cvsSplitBy + info[0] + ";" + nameServer + ";" + (responceTime+delay) + ";" + (responceTime+delay));
+					writerObject.append("\n");
+					
+				}
+			}
+			
+			
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if(writerObject != null){
+				try {
+					writerObject.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		
+		try {
+			//now execute the R file and build the new graph
+			UtilityClass.writeRFileOneInstance(filename + "_location");
+			UtilityClass.runScript(filename + "_location"+".R");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
 	}
 	
 	
@@ -585,15 +658,9 @@ public class UtilityClass {
 		}
 	}
 	
-	
-	public static void runScript(List<String> rScripts, String path) throws IOException {
-		for (String rScript : rScripts) {
-			runScript(rScript, path);
-		}
 		
-	}
-
-	public static void runScript(String rScriptPath, String path)
+	
+	public static void runScript(String rScriptPath)
 			throws IOException {
 		String pathToExecute = R_CMD + "\"" + rScriptPath + "\"";
 		Runtime.getRuntime().exec(pathToExecute);

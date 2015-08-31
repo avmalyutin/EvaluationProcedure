@@ -13,16 +13,21 @@ import weka.core.Instances;
 import app.files.DeleteScript;
 import app.files.TrainAndTestData;
 import app.files.UtilityClass;
+import app.model.LocationModule;
 import app.model.MainModel;
 
 public class MainClassV2 {
 	
 	//paths
-	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//16. Third experiment 60 small";
+	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//11. Second experiment";
 	private static final String OP_COST_FILE = "E://SwedenData//NewLife//opCost//operationCost.csv";
 	
 	//other stuff
 	public static HashMap<String, Integer> operationCost = new HashMap<String, Integer>();
+	
+	
+	public static String userCountry = "null";
+	
 	
 	public static void main(String [] args) throws Exception{
 		
@@ -34,6 +39,8 @@ public class MainClassV2 {
 		
 		File [] files = folder.listFiles();
 		
+		
+		int countryIndex = 0;
 		for(int i=0; i<1; i++){
 			
 			long startTime = System.nanoTime();
@@ -50,6 +57,14 @@ public class MainClassV2 {
 					break;
 				}
 			}
+			
+			
+			userCountry = LocationModule.getTheCountryByIndex(countryIndex);
+			countryIndex ++;
+			if(countryIndex > 3)
+				countryIndex = 0;
+			
+			UtilityClass.modifyCSVLocation(fileToExtract.getAbsolutePath(), userCountry);
 			
 			TrainAndTestData dataObject = UtilityClass.extractOneSetFromCVS(fileToExtract.getAbsolutePath());
 			
@@ -101,7 +116,7 @@ public class MainClassV2 {
 				if(insideFolder[j].getName().contains("generated_profiled_realAndPredicted") && 
 						insideFolder[j].getName().contains(".R")){
 					//execute script
-					UtilityClass.runScript(insideFolder[j].getAbsolutePath(), insideFolder[j].getAbsolutePath());
+					UtilityClass.runScript(insideFolder[j].getAbsolutePath());
 				}
         	}
         	
