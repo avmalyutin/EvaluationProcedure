@@ -19,7 +19,7 @@ import app.model.MainModel;
 public class MainClassV2 {
 	
 	//paths
-	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//11. Second experiment";
+	public static final String ROOT_PATH_PREF = "E://SwedenData//NewLife//dataset//18. Second experiment + location";
 	private static final String OP_COST_FILE = "E://SwedenData//NewLife//opCost//operationCost.csv";
 	
 	//other stuff
@@ -40,7 +40,7 @@ public class MainClassV2 {
 		File [] files = folder.listFiles();
 		
 		
-		int countryIndex = 0;
+		int countryIndex = 1;
 		for(int i=0; i<1; i++){
 			
 			long startTime = System.nanoTime();

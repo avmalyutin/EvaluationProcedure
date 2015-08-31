@@ -2,6 +2,7 @@ package app.model;
 
 import java.io.Serializable;
 
+import app.main.MainClassV2;
 import weka.classifiers.Classifier;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.bayes.NaiveBayesMultinomial;
@@ -82,7 +83,11 @@ public class ClassifierImpl implements Serializable{
 		try {
 			inst.setValue(Attribute1, date);
 			inst.setValue(Attribute2, '?');
-			predictedRespTime = machineAlgorithm.classifyInstance(inst);
+			//check once more
+			int delayTime = LocationModule.getDistanceByTwoPlaces(MainClassV2.userCountry, serviceName);
+			System.out.println("Delay time: " + delayTime);
+			predictedRespTime = machineAlgorithm.classifyInstance(inst) + delayTime;
+			// TODO here we should insert the delay time
 			System.out.println("In ClassImp: serviceName: " + serviceName + ":" + predictedRespTime);
 		} catch (Exception e) {
 			e.printStackTrace();

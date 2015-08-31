@@ -6,10 +6,10 @@ import java.util.Map;
 public class LocationModule {
 	
 	static Map <String, Integer> locationMatrix;
-	static String swedCountry = "SWE";
-	static String gerCountry = "GER";
+	static String swedCountry = "Sweden";
+	static String gerCountry = "Germany";
 	static String usaCountry = "USA";
-	static String argCountry = "ARG";
+	static String argCountry = "Argentina";
 
 
 	static{
@@ -46,6 +46,9 @@ public class LocationModule {
 	
 	public static int getDistanceByTwoPlaces(String place1, String place2){
 		
+		if(place1.equals(place2)){
+			return locationMatrix.get(place1 + "-" + place2);
+		}
 		
 		for (Map.Entry<String, Integer> entry : locationMatrix.entrySet()){
 			String key = entry.getKey();
